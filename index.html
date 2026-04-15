@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="GDG Codelab - Building with Google Antigravity: Conference App, Pomodoro Timer, Unit Tests, Web Research.">
+    <title>ProyectoGDG — Codelab: Building with Google Antigravity</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0e1a;
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --border: rgba(255,255,255,0.06);
+            --border-hover: rgba(255,255,255,0.15);
+            --blue: #4285F4;
+            --green: #34A853;
+            --yellow: #FBBC04;
+            --red: #EA4335;
+            --purple: #6C63FF;
+            --text: #f1f5f9;
+            --text2: #94a3b8;
+            --text3: #64748b;
+            --radius: 20px;
+            --transition: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Ambient */
+        .ambient { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.12; animation: drift 25s ease-in-out infinite; }
+        .blob-1 { width: 500px; height: 500px; background: var(--blue); top: -10%; right: -5%; }
+        .blob-2 { width: 400px; height: 400px; background: var(--green); bottom: -10%; left: -5%; animation-delay: -8s; }
+        .blob-3 { width: 300px; height: 300px; background: var(--purple); top: 40%; left: 50%; animation-delay: -16s; }
+        @keyframes drift {
+            0%, 100% { transform: translate(0,0) scale(1); }
+            33% { transform: translate(40px,-30px) scale(1.08); }
+            66% { transform: translate(-30px,20px) scale(0.94); }
+        }
+
+        .container { max-width: 960px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 100px 24px 60px;
+        }
+
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(66,133,244,0.08); border: 1px solid rgba(66,133,244,0.2);
+            border-radius: 999px; padding: 8px 20px;
+            font-size: 0.82rem; font-weight: 500; color: var(--blue);
+            margin-bottom: 28px;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .hero-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.4; transform:scale(1.4); } }
+
+        @keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+        .hero h1 {
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            font-weight: 700; line-height: 1.1;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--text) 0%, var(--blue) 50%, var(--green) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            animation: fadeIn 0.6s ease 0.1s both;
+        }
+
+        .hero p {
+            font-size: 1.1rem; color: var(--text2); font-weight: 300;
+            max-width: 600px; margin: 0 auto;
+            animation: fadeIn 0.6s ease 0.2s both;
+        }
+
+        /* Cards Grid */
+        .cards-section { padding: 20px 0 80px; }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px 28px;
+            text-decoration: none;
+            color: inherit;
+            transition: all var(--transition);
+            backdrop-filter: blur(12px);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease both;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+
+        .card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            border-radius: var(--radius) var(--radius) 0 0;
+            transition: opacity var(--transition);
+        }
+
+        .card:hover::before { opacity: 1; }
+
+        .card-1::before { background: linear-gradient(90deg, var(--blue), var(--green)); }
+        .card-2::before { background: linear-gradient(90deg, var(--blue), var(--yellow)); }
+        .card-3::before { background: linear-gradient(90deg, var(--purple), var(--blue)); }
+        .card-4::before { background: linear-gradient(90deg, var(--green), var(--yellow)); }
+
+        .card-num {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 40px; height: 40px; border-radius: 12px;
+            font-weight: 700; font-size: 1rem;
+            margin-bottom: 18px;
+        }
+
+        .card-1 .card-num { background: rgba(66,133,244,0.12); color: var(--blue); }
+        .card-2 .card-num { background: rgba(52,168,83,0.12); color: var(--green); }
+        .card-3 .card-num { background: rgba(108,99,255,0.12); color: var(--purple); }
+        .card-4 .card-num { background: rgba(251,188,4,0.12); color: var(--yellow); }
+
+        .card h2 {
+            font-size: 1.2rem; font-weight: 600;
+            margin-bottom: 10px; line-height: 1.3;
+        }
+
+        .card p {
+            font-size: 0.88rem; color: var(--text2);
+            line-height: 1.6; margin-bottom: 18px;
+        }
+
+        .card-tech {
+            display: flex; flex-wrap: wrap; gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .tech-tag {
+            font-size: 0.7rem; font-weight: 500;
+            padding: 4px 10px; border-radius: 999px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            color: var(--text3);
+        }
+
+        .card-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 0.85rem; font-weight: 500;
+            color: var(--blue); transition: gap var(--transition);
+        }
+
+        .card:hover .card-link { gap: 10px; }
+
+        .card-link svg { transition: transform var(--transition); }
+        .card:hover .card-link svg { transform: translateX(2px); }
+
+        /* Footer */
+        .footer {
+            text-align: center; padding: 32px 0;
+            border-top: 1px solid var(--border);
+            position: relative; z-index: 1;
+        }
+        .footer p { font-size: 0.78rem; color: var(--text3); }
+        .footer a { color: var(--blue); text-decoration: none; }
+
+        /* Responsive */
+        @media (max-width: 680px) {
+            .cards-grid { grid-template-columns: 1fr; }
+            .hero { padding: 60px 16px 40px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="ambient">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <header class="hero">
+        <div class="hero-badge">
+            <span class="dot"></span>
+            Google Codelab
+        </div>
+        <h1>Building with Google Antigravity</h1>
+        <p>Four hands-on exercises covering web research, full-stack apps, productivity tools, and enterprise-level unit testing.</p>
+    </header>
+
+    <main class="cards-section">
+        <div class="container">
+            <div class="cards-grid">
+                <!-- Card 1: Web Research -->
+                <a href="web-research/index.html" class="card card-1" id="card-web-research">
+                    <div class="card-num">01</div>
+                    <h2>Web Research & News Highlights</h2>
+                    <p>Demonstrates autonomous web browsing — the agent visits sites, extracts information, and returns structured results from a simple prompt.</p>
+                    <div class="card-tech">
+                        <span class="tech-tag">Browser Agent</span>
+                        <span class="tech-tag">Data Extraction</span>
+                        <span class="tech-tag">Google News</span>
+                    </div>
+                    <span class="card-link">
+                        Open Exercise
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </span>
+                </a>
+
+                <!-- Card 2: Conference App -->
+                <a href="conference-app-static/index.html" class="card card-2" id="card-conference">
+                    <div class="card-num">02</div>
+                    <h2>Tech Conference Website</h2>
+                    <p>A full-stack informational site for a 1-day Google Cloud event with 8 talks, 12 speakers, real-time search, and category filtering.</p>
+                    <div class="card-tech">
+                        <span class="tech-tag">Python / Flask</span>
+                        <span class="tech-tag">HTML / CSS / JS</span>
+                        <span class="tech-tag">Google Cloud</span>
+                    </div>
+                    <span class="card-link">
+                        Open Exercise
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </span>
+                </a>
+
+                <!-- Card 3: Pomodoro Timer -->
+                <a href="pomodoro-app/index.html" class="card card-3" id="card-pomodoro">
+                    <div class="card-num">03</div>
+                    <h2>Pomodoro Flow Timer</h2>
+                    <p>A calm, aesthetic productivity timer with SVG ring progress, audio notifications, session tracking, and keyboard shortcuts.</p>
+                    <div class="card-tech">
+                        <span class="tech-tag">Pure HTML/CSS/JS</span>
+                        <span class="tech-tag">Web Audio API</span>
+                        <span class="tech-tag">SVG Animation</span>
+                    </div>
+                    <span class="card-link">
+                        Open Exercise
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </span>
+                </a>
+
+                <!-- Card 4: Order Service -->
+                <a href="https://github.com/Eddglitch/ProyectoGDG/tree/main/order-service" class="card card-4" id="card-tests" target="_blank">
+                    <div class="card-num">04</div>
+                    <h2>Order Service — Unit Tests</h2>
+                    <p>32 comprehensive pytest tests with mock implementations covering checkout flows, discount logic, stock validation, and payment error handling.</p>
+                    <div class="card-tech">
+                        <span class="tech-tag">Python / pytest</span>
+                        <span class="tech-tag">unittest.mock</span>
+                        <span class="tech-tag">32 Tests ✅</span>
+                    </div>
+                    <span class="card-link">
+                        View on GitHub
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>ProyectoGDG · <a href="https://codelabs.developers.google.com/building-with-google-antigravity" target="_blank">Codelab: Building with Google Antigravity</a> · Built by Eduardo Téllez Va</p>
+    </footer>
+</body>
+</html>

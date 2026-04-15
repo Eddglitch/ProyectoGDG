@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Join us for a full day of cutting-edge talks on Google Cloud Technologies. From AI &amp; Machine Learning to Cloud Infrastructure, learn from industry experts and discover what&#39;s next in cloud computing.">
+    <title>Google Cloud Summit 2026 — Building the Future with Google Cloud</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Hero Section -->
+    <header class="hero" id="hero">
+        <div class="hero-bg-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                Google Cloud Technologies
+            </div>
+            <h1 class="hero-title">Google Cloud Summit 2026</h1>
+            <p class="hero-tagline">Building the Future with Google Cloud</p>
+            <div class="hero-meta">
+                <div class="meta-item">
+                    <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    <span>April 15, 2026</span>
+                </div>
+                <div class="meta-item">
+                    <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    <span>Googleplex, Mountain View, CA</span>
+                </div>
+                <div class="meta-item">
+                    <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    <span>09:00 — 16:30</span>
+                </div>
+            </div>
+            <a href="#schedule" class="hero-cta" id="hero-cta">
+                View Schedule
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/>
+                </svg>
+            </a>
+        </div>
+    </header>
+
+    <!-- Search & Filter Section -->
+    <section class="search-section" id="search-section">
+        <div class="container">
+            <div class="search-bar" id="search-bar">
+                <div class="search-input-wrapper">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                    <input 
+                        type="text" 
+                        id="search-input" 
+                        class="search-input" 
+                        placeholder="Search by title, speaker, or keyword..."
+                        autocomplete="off"
+                    >
+                    <button class="search-clear" id="search-clear" aria-label="Clear search" style="display:none;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="filter-pills" id="filter-pills">
+                    <button class="pill active" data-category="" id="filter-all">All Talks</button>
+                    
+                    <button class="pill" data-category="AI &amp; Machine Learning" id="filter-ai-and-machine-learning">AI &amp; Machine Learning</button>
+                    
+                    <button class="pill" data-category="Cloud Infrastructure" id="filter-cloud-infrastructure">Cloud Infrastructure</button>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Schedule Section -->
+    <section class="schedule-section" id="schedule">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Conference Schedule</h2>
+                <p class="section-subtitle">A full day of innovation and learning</p>
+            </div>
+            <div class="timeline" id="timeline">
+                
+                <div class="talk-card " 
+                     data-talk-id="T001"
+                     data-categories="ai &amp; machine learning"
+                     data-title="keynote: the future of ai on google cloud"
+                     data-speakers="Maria Chen James Rodriguez "
+                     id="talk-T001">
+                    
+                    <div class="talk-time-col">
+                        <span class="talk-time">09:00</span>
+                        <span class="talk-duration">45 min</span>
+                    </div>
+
+                    <div class="talk-connector">
+                        <div class="connector-dot"></div>
+                        <div class="connector-line"></div>
+                    </div>
+
+                    <div class="talk-content">
+                        
+                        <div class="card-inner">
+                            <div class="card-header">
+                                <div class="card-categories">
+                                    
+                                    <span class="category-tag tag-ai">AI &amp; Machine Learning</span>
+                                    
+                                </div>
+                                <span class="talk-id">T001</span>
+                            </div>
+                            <h3 class="talk-title">Keynote: The Future of AI on Google Cloud</h3>
+                            <p class="talk-description">Discover how Google Cloud is pushing the boundaries of artificial intelligence with Gemini, Vertex AI, and next-generation foundation models. Learn about the latest breakthroughs and what they mean for developers.</p>
+                            <div class="talk-speakers">
+                                
+                                <a href="https://www.linkedin.com/in/mariachen" target="_blank" rel="noopener noreferrer" class="speaker-chip" id="speaker-sp01">
+                                    <div class="speaker-avatar">
+                                        MC
+                                    </div>
+                                    <div class="speaker-info">
+                                        <span class="speaker-name">Maria Chen</span>
+                                        <span class="speaker-link">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                            </svg>
+                                            LinkedIn
+                                        </span>
+                                    </div>
+                                </a>
+                                
+                                <a href="https://www.linkedin.com/in/jamesrodriguez" target="_blank" rel="noopener noreferrer" class="speaker-chip" id="speaker-sp02">
+                                    <div class="speaker-avatar">
+                                        JR
+                                    </div>
+                                    <div class="speaker-info">
+                                        <span class="speaker-name">James Rodriguez</span>
+                                        <span class="speaker-link">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                            </svg>
+                                            LinkedIn
+                                        </span>
+                                    </div>
+                                </a>
+                                
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                <div class="talk-card " 
+                     data-talk-id="T002"
+                     data-categories="ai &amp; machine learning"
+                     data-title="building intelligent apps with gemini api"
+                     data-speakers="Aisha Patel "
+                     id="talk-T002">
+                    
+                    <div class="talk-time-col">
+                        <span class="talk-time">09:50</span>
+                        <span class="talk-duration">45 min</span>
+                    </div>
+
+                    <div class="talk-connector">
+                        <div class="connector-dot"></div>
+                        <div class="connector-line"></div>
+                    </div>
+
+                    <div class="talk-content">
+                        
+                        <div class="card-inner">
+                            <div class="card-header">
+                                <div class="card-categories">
+                                    
+                                    <span class="category-tag tag-ai">AI &amp; Machine Learning</span>
+                                    
+                                </div>
+                                <span class="talk-id">T002</span>
+                            </div>
+                            <h3 class="talk-title">Building Intelligent Apps with Gemini API</h3>
+                            <p class="talk-description">A hands-on deep dive into the Gemini API. Learn how to integrate multimodal AI capabilities into your applications, from text generation to image understanding and code assistance.</p>
+                            <div class="talk-speakers">
+                                
+                                <a href="https://www.linkedin.com/in/aishapatel" target="_blank" rel="noopener noreferrer" class="speaker-chip" id="speaker-sp03">
+                                    <div class="speaker-avatar">
+                                        AP
+                                    </div>
+                                    <div class="speaker-info">
+                                        <span class="speaker-name">Aisha Patel</span>
+                                        <span class="speaker-link">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                            </svg>
+                                            LinkedIn
+                                        </span>
+                                    </div>
+                                </a>
+                                
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                <div class="talk-card " 
+                     data-talk-id="T003"
+                     data-categories="cloud infrastructure"
+                     data-title="serverless at scale with cloud run &amp; cloud functions"
+                     data-speakers="David Kim Sophie Müller "
+                     id="talk-T003">
+                    
+                    <div class="talk-time-col">
+                        <span class="talk-time">10:40</span>
+                        <span class="talk-duration">45 min</span>
+                    </div>
+
+                    <div class="talk-connector">
+                        <div class="connector-dot"></div>
+                        <div class="connector-line"></div>
+                    </div>
+
+                    <div class="talk-content">
+                        
+                        <div class="card-inner">
+                            <div class="card-header">
+                                <div class="card-categories">
+                                    
+                                    <span class="category-tag tag-infra">Cloud Infrastructure</span>
+                                    
+                                </div>
+                                <span class="talk-id">T003</span>
+                            </div>
+                            <h3 class="talk-title">Serverless at Scale with Cloud Run &amp; Cloud Functions</h3>
+                            <p class="talk-description">Explore how to build and deploy scalable serverless applications using Cloud Run and Cloud Functions. We&#39;ll cover best practices for autoscaling, cold start optimization, and cost management.</p>
+                            <div class="talk-speakers">
+                                
+                                <a href="https://www.linkedin.com/in/davidkim" target="_blank" rel="noopener noreferrer" class="speaker-chip" id="speaker-sp04">
+                                    <div class="speaker-avatar">
+                                        DK
+                                    </div>
+                                    <div class="speaker-info">
+                                        <span class="speaker-name">David Kim</span>
+                                        <span class="speaker-link">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                            </svg>
+                                            LinkedIn
+                                        </span>
+                                    </div>
+                                </a>
+                                
+                                <a href="https://www.linkedin.com/in/sophiemuller" target="_blank" rel="noopener noreferrer" class="speaker-chip" id="speaker-sp05">
+                                    <div class="speaker-avatar">
+                                        SM
+                                    </div>
+                                    <div class="speaker-info">
+                                        <span class="speaker-name">Sophie Müller</span>
+                                        <span class="speaker-link">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                            </svg>
+                                            LinkedIn
+                                        </span>
+                                    </div>
+                                </a>
+                                
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                <div class="talk-card " 
+                     data-talk-id="T004"
+                     data-categories="ai &amp; machine learning,cloud infrastructure"
+                     data-title="real-time analytics with bigquery &amp; looker"
+                     data-speakers="Carlos Oliveira "
+                     id="talk-T004">
+                    
+                    <div class="talk-time-col">
+                        <span class="talk-time">11:30</span>
+                        <span class="talk-duration">45 min</span>
+                    </div>
+
+                    <div class="talk-connector">
+                        <div class="connector-dot"></div>
+                        <div class="connector-line"></div>
+                    </div>
+
+                    <div class="talk-content">
+                        
+                        <div class="card-inner">
+                            <div class="card-header">
+                                <div class="card-categories">
+                                    
+                                    <span class="category-tag tag-ai">AI &amp; Machine Learning</span>
+                                    
+                                    <span class="category-tag tag-infra">Cloud Infrastructure</span>
+                                    
+                                </div>
+                                <span class="talk-id">T004</span>
+                            </div>
+                            <h3 class="talk-title">Real-Time Analytics with BigQuery &amp; Looker</h3>
+                            <p class="talk-description">Learn how to unlock insights from your data using BigQuery&#39;s serverless architecture and Looker&#39;s powerful visualization capabilities. From streaming ingestion to real-time dashboards.</p>
+                            <div class="talk-speakers">
+                                
+                                <a href="https://www.linkedin.com/in/carlosoliveira" target="_blank" rel="noopener noreferrer" class="speaker-chip" id="speaker-sp06">
+                                    <div class="speaker-avatar">
+                                        CO
+                                    </div>
+                                    <div class="speaker-info">
+                                        <span class="speaker-name">Carlos Oliveira</span>
+                                        <span class="speaker-link">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                            </svg>
+                                            LinkedIn
+                                        </span>
+                                    </div>
+                                </a>
+                                
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                <div class="talk-card talk-break" 
+                     data-talk-id="LUNCH"
+                     data-categories=""
+                     data-title="lunch break &amp; networking"
+                     data-speakers=""
+                     id="talk-LUNCH">
+                    
+                    <div class="talk-time-col">
+                        <span class="talk-time">12:15</span>
+                        <span class="talk-duration">60 min</span>
+                    </div>
+
+                    <div class="talk-connector">
+                        <div class="connector-dot"></div>
+                        <div class="connector-line"></div>
+                    </div>
+
+                    <div class="talk-content">
+                        
+                        <div class="break-card">
+                            <div class="break-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+                                    <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+                                    <line x1="6" y1="1" x2="6" y2="4"/>
+                                    <line x1="10" y1="1" x2="10" y2="4"/>
+                                    <line x1="14" y1="1" x2="14" y2="4"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="break-title">Lunch Break &amp; Networking</h3>
+                                <p class="break-desc">Enjoy lunch and connect with fellow attendees and speakers.</p>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                <div class="talk-card " 
+                     data-talk-id="T005"
+                     data-categories="cloud infrastructure"
+                     data-title="kubernetes mastery: gke autopilot in production"
+                     data-speakers="Priya Sharma Liam O&#39;Brien "
+                     id="talk-T005">
+                    
+                    <div class="talk-time-col">
+                        <span class="talk-time">13:15</span>
+                        <span class="talk-duration">45 min</span>
+                    </div>
+
+                    <div class="talk-connector">
+                        <div class="connector-dot"></div>
+                        <div class="connector-line"></div>
+                    </div>
+
+                    <div class="talk-content">
+                        
+                        <div class="card-inner">
+                            <div class="card-header">
+                                <div class="card-categories">
+                                    
+                                    <span class="category-tag tag-infra">Cloud Infrastructure</span>
+                                    
+                                </div>
+                                <span class="talk-id">T005</span>
+                            </div>
+                            <h3 class="talk-title">Kubernetes Mastery: GKE Autopilot in Production</h3>
+                            <p class="talk-description">Deep dive into Google Kubernetes Engine Autopilot mode. Learn how to run production workloads with minimal operational overhead, including security best practices and cost optimization strategies.</p>
+                            <div class="talk-speakers">
+                                
+                                <a href="https://www.linkedin.com/in/priyasharma" target="_blank" rel="noopener noreferrer" class="speaker-chip" id="speaker-sp07">
+                                    <div class="speaker-avatar">
+                                        PS
+                                    </div>
+                                    <div class="speaker-info">
+                                        <span class="speaker-name">Priya Sharma</span>
+                                        <span class="speaker-link">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                            </svg>
+                                            LinkedIn
+                                        </span>
+                                    </div>
+                                </a>
+                                
+                                <a href="https://www.linkedin.com/in/liamobrien" target="_blank" rel="noopener noreferrer" class="speaker-chip" id="speaker-sp08">
+                                    <div class="speaker-avatar">
+                                        LO
+                                    </div>
+                                    <div class="speaker-info">
+                                        <span class="speaker-name">Liam O&#39;Brien</span>
+                                        <span class="speaker-link">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                            </svg>
+                                            LinkedIn
+                                        </span>
+                                    </div>
+                                </a>
+                                
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                <div class="talk-card " 
+                     data-talk-id="T006"
+                     data-categories="cloud infrastructure"
+                     data-title="building with firestore: nosql for modern apps"
+                     data-speakers="Yuki Tanaka "
+                     id="talk-T006">
+                    
+                    <div class="talk-time-col">
+                        <span class="talk-time">14:05</span>
+                        <span class="talk-duration">45 min</span>
+                    </div>
+
+                    <div class="talk-connector">
+                        <div class="connector-dot"></div>
+                        <div class="connector-line"></div>
+                    </div>
+
+                    <div class="talk-content">
+                        
+                        <div class="card-inner">
+                            <div class="card-header">
+                                <div class="card-categories">
+                                    
+                                    <span class="category-tag tag-infra">Cloud Infrastructure</span>
+                                    
+                                </div>
+                                <span class="talk-id">T006</span>
+                            </div>
+                            <h3 class="talk-title">Building with Firestore: NoSQL for Modern Apps</h3>
+                            <p class="talk-description">Discover the power of Firestore for building responsive, offline-capable applications. We&#39;ll cover data modeling, real-time listeners, security rules, and scaling strategies for global deployments.</p>
+                            <div class="talk-speakers">
+                                
+                                <a href="https://www.linkedin.com/in/yukitanaka" target="_blank" rel="noopener noreferrer" class="speaker-chip" id="speaker-sp09">
+                                    <div class="speaker-avatar">
+                                        YT
+                                    </div>
+                                    <div class="speaker-info">
+                                        <span class="speaker-name">Yuki Tanaka</span>
+                                        <span class="speaker-link">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                            </svg>
+                                            LinkedIn
+                                        </span>
+                                    </div>
+                                </a>
+                                
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                <div class="talk-card " 
+                     data-talk-id="T007"
+                     data-categories="ai &amp; machine learning"
+                     data-title="mlops on vertex ai: from prototype to production"
+                     data-speakers="Elena Vasquez Omar Hassan "
+                     id="talk-T007">
+                    
+                    <div class="talk-time-col">
+                        <span class="talk-time">14:55</span>
+                        <span class="talk-duration">45 min</span>
+                    </div>
+
+                    <div class="talk-connector">
+                        <div class="connector-dot"></div>
+                        <div class="connector-line"></div>
+                    </div>
+
+                    <div class="talk-content">
+                        
+                        <div class="card-inner">
+                            <div class="card-header">
+                                <div class="card-categories">
+                                    
+                                    <span class="category-tag tag-ai">AI &amp; Machine Learning</span>
+                                    
+                                </div>
+                                <span class="talk-id">T007</span>
+                            </div>
+                            <h3 class="talk-title">MLOps on Vertex AI: From Prototype to Production</h3>
+                            <p class="talk-description">Bridge the gap between ML experimentation and production. Learn how to use Vertex AI Pipelines, Model Registry, and Feature Store to build robust, reproducible machine learning workflows.</p>
+                            <div class="talk-speakers">
+                                
+                                <a href="https://www.linkedin.com/in/elenavasquez" target="_blank" rel="noopener noreferrer" class="speaker-chip" id="speaker-sp10">
+                                    <div class="speaker-avatar">
+                                        EV
+                                    </div>
+                                    <div class="speaker-info">
+                                        <span class="speaker-name">Elena Vasquez</span>
+                                        <span class="speaker-link">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                            </svg>
+                                            LinkedIn
+                                        </span>
+                                    </div>
+                                </a>
+                                
+                                <a href="https://www.linkedin.com/in/omarhassan" target="_blank" rel="noopener noreferrer" class="speaker-chip" id="speaker-sp11">
+                                    <div class="speaker-avatar">
+                                        OH
+                                    </div>
+                                    <div class="speaker-info">
+                                        <span class="speaker-name">Omar Hassan</span>
+                                        <span class="speaker-link">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                            </svg>
+                                            LinkedIn
+                                        </span>
+                                    </div>
+                                </a>
+                                
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                <div class="talk-card " 
+                     data-talk-id="T008"
+                     data-categories="cloud infrastructure"
+                     data-title="securing the cloud: zero trust with google cloud security"
+                     data-speakers="Rebecca Nguyen "
+                     id="talk-T008">
+                    
+                    <div class="talk-time-col">
+                        <span class="talk-time">15:45</span>
+                        <span class="talk-duration">45 min</span>
+                    </div>
+
+                    <div class="talk-connector">
+                        <div class="connector-dot"></div>
+                        <div class="connector-line"></div>
+                    </div>
+
+                    <div class="talk-content">
+                        
+                        <div class="card-inner">
+                            <div class="card-header">
+                                <div class="card-categories">
+                                    
+                                    <span class="category-tag tag-infra">Cloud Infrastructure</span>
+                                    
+                                </div>
+                                <span class="talk-id">T008</span>
+                            </div>
+                            <h3 class="talk-title">Securing the Cloud: Zero Trust with Google Cloud Security</h3>
+                            <p class="talk-description">Security is everyone&#39;s responsibility. Explore Google Cloud&#39;s Zero Trust security model, including BeyondCorp Enterprise, Security Command Center, and Cloud Armor for comprehensive threat protection.</p>
+                            <div class="talk-speakers">
+                                
+                                <a href="https://www.linkedin.com/in/rebeccangyuen" target="_blank" rel="noopener noreferrer" class="speaker-chip" id="speaker-sp12">
+                                    <div class="speaker-avatar">
+                                        RN
+                                    </div>
+                                    <div class="speaker-info">
+                                        <span class="speaker-name">Rebecca Nguyen</span>
+                                        <span class="speaker-link">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                            </svg>
+                                            LinkedIn
+                                        </span>
+                                    </div>
+                                </a>
+                                
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+            </div>
+
+            <!-- No results message -->
+            <div class="no-results" id="no-results" style="display: none;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    <line x1="8" y1="8" x2="14" y2="14"/><line x1="14" y1="8" x2="8" y2="14"/>
+                </svg>
+                <h3>No talks found</h3>
+                <p>Try a different search term or category filter.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Speakers Section -->
+    <section class="speakers-section" id="speakers">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our Speakers</h2>
+                <p class="section-subtitle">Learn from industry-leading Google Cloud experts</p>
+            </div>
+            <div class="speakers-grid">
+                
+                <a href="https://www.linkedin.com/in/mariachen" target="_blank" rel="noopener noreferrer" class="speaker-card" id="speaker-card-sp01">
+                    <div class="speaker-card-avatar">
+                        MC
+                    </div>
+                    <h4 class="speaker-card-name">Maria Chen</h4>
+                    <span class="speaker-card-linkedin">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                        View Profile
+                    </span>
+                </a>
+                
+                <a href="https://www.linkedin.com/in/jamesrodriguez" target="_blank" rel="noopener noreferrer" class="speaker-card" id="speaker-card-sp02">
+                    <div class="speaker-card-avatar">
+                        JR
+                    </div>
+                    <h4 class="speaker-card-name">James Rodriguez</h4>
+                    <span class="speaker-card-linkedin">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                        View Profile
+                    </span>
+                </a>
+                
+                <a href="https://www.linkedin.com/in/aishapatel" target="_blank" rel="noopener noreferrer" class="speaker-card" id="speaker-card-sp03">
+                    <div class="speaker-card-avatar">
+                        AP
+                    </div>
+                    <h4 class="speaker-card-name">Aisha Patel</h4>
+                    <span class="speaker-card-linkedin">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                        View Profile
+                    </span>
+                </a>
+                
+                <a href="https://www.linkedin.com/in/davidkim" target="_blank" rel="noopener noreferrer" class="speaker-card" id="speaker-card-sp04">
+                    <div class="speaker-card-avatar">
+                        DK
+                    </div>
+                    <h4 class="speaker-card-name">David Kim</h4>
+                    <span class="speaker-card-linkedin">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                        View Profile
+                    </span>
+                </a>
+                
+                <a href="https://www.linkedin.com/in/sophiemuller" target="_blank" rel="noopener noreferrer" class="speaker-card" id="speaker-card-sp05">
+                    <div class="speaker-card-avatar">
+                        SM
+                    </div>
+                    <h4 class="speaker-card-name">Sophie Müller</h4>
+                    <span class="speaker-card-linkedin">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                        View Profile
+                    </span>
+                </a>
+                
+                <a href="https://www.linkedin.com/in/carlosoliveira" target="_blank" rel="noopener noreferrer" class="speaker-card" id="speaker-card-sp06">
+                    <div class="speaker-card-avatar">
+                        CO
+                    </div>
+                    <h4 class="speaker-card-name">Carlos Oliveira</h4>
+                    <span class="speaker-card-linkedin">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                        View Profile
+                    </span>
+                </a>
+                
+                <a href="https://www.linkedin.com/in/priyasharma" target="_blank" rel="noopener noreferrer" class="speaker-card" id="speaker-card-sp07">
+                    <div class="speaker-card-avatar">
+                        PS
+                    </div>
+                    <h4 class="speaker-card-name">Priya Sharma</h4>
+                    <span class="speaker-card-linkedin">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                        View Profile
+                    </span>
+                </a>
+                
+                <a href="https://www.linkedin.com/in/liamobrien" target="_blank" rel="noopener noreferrer" class="speaker-card" id="speaker-card-sp08">
+                    <div class="speaker-card-avatar">
+                        LO
+                    </div>
+                    <h4 class="speaker-card-name">Liam O&#39;Brien</h4>
+                    <span class="speaker-card-linkedin">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                        View Profile
+                    </span>
+                </a>
+                
+                <a href="https://www.linkedin.com/in/yukitanaka" target="_blank" rel="noopener noreferrer" class="speaker-card" id="speaker-card-sp09">
+                    <div class="speaker-card-avatar">
+                        YT
+                    </div>
+                    <h4 class="speaker-card-name">Yuki Tanaka</h4>
+                    <span class="speaker-card-linkedin">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                        View Profile
+                    </span>
+                </a>
+                
+                <a href="https://www.linkedin.com/in/elenavasquez" target="_blank" rel="noopener noreferrer" class="speaker-card" id="speaker-card-sp10">
+                    <div class="speaker-card-avatar">
+                        EV
+                    </div>
+                    <h4 class="speaker-card-name">Elena Vasquez</h4>
+                    <span class="speaker-card-linkedin">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                        View Profile
+                    </span>
+                </a>
+                
+                <a href="https://www.linkedin.com/in/omarhassan" target="_blank" rel="noopener noreferrer" class="speaker-card" id="speaker-card-sp11">
+                    <div class="speaker-card-avatar">
+                        OH
+                    </div>
+                    <h4 class="speaker-card-name">Omar Hassan</h4>
+                    <span class="speaker-card-linkedin">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                        View Profile
+                    </span>
+                </a>
+                
+                <a href="https://www.linkedin.com/in/rebeccangyuen" target="_blank" rel="noopener noreferrer" class="speaker-card" id="speaker-card-sp12">
+                    <div class="speaker-card-avatar">
+                        RN
+                    </div>
+                    <h4 class="speaker-card-name">Rebecca Nguyen</h4>
+                    <span class="speaker-card-linkedin">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                        View Profile
+                    </span>
+                </a>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-logo">Google Cloud Summit 2026</p>
+                <p class="footer-text">April 15, 2026 · Googleplex, Mountain View, CA</p>
+                <p class="footer-copy">&copy; 2026 Google Cloud Summit. Built for the GDG Codelab.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
