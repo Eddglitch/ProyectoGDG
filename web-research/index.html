@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Web Research Dashboard - Demonstrating autonomous web browsing and data extraction.">
+    <title>Web Research Dashboard — News Highlights</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Design Tokens --- */
+        :root {
+            --bg: #0b0f19;
+            --bg-card: rgba(17, 22, 38, 0.8);
+            --border: rgba(255,255,255,0.06);
+            --border-hover: rgba(255,255,255,0.12);
+            --accent: #4285F4;
+            --accent-glow: rgba(66,133,244,0.2);
+            --green: #34A853;
+            --yellow: #FBBC04;
+            --red: #EA4335;
+            --text: #e8ecf4;
+            --text2: #8b93a7;
+            --text3: #4d5568;
+            --font: 'Inter', system-ui, sans-serif;
+            --radius: 16px;
+            --transition: 250ms ease;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { -webkit-font-smoothing: antialiased; }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 40px 24px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* --- Header --- */
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            background: rgba(66,133,244,0.1);
+            border: 1px solid rgba(66,133,244,0.2);
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .badge-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--text), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text2);
+            font-size: 1rem;
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* --- How It Works --- */
+        .how-section {
+            margin-bottom: 48px;
+        }
+
+        .how-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text2);
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .step-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px 20px;
+            text-align: center;
+            transition: all var(--transition);
+            animation: fadeIn 0.6s ease both;
+        }
+
+        .step-card:nth-child(1) { animation-delay: 0.1s; }
+        .step-card:nth-child(2) { animation-delay: 0.2s; }
+        .step-card:nth-child(3) { animation-delay: 0.3s; }
+        .step-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .step-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+        }
+
+        .step-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: rgba(66,133,244,0.1);
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 14px;
+        }
+
+        .step-card h3 {
+            font-size: 0.92rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .step-card p {
+            font-size: 0.8rem;
+            color: var(--text2);
+            line-height: 1.5;
+        }
+
+        /* --- Prompts Section --- */
+        .prompts-section {
+            margin-bottom: 48px;
+        }
+
+        .prompt-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 16px;
+            transition: all var(--transition);
+            animation: fadeIn 0.6s ease both;
+        }
+
+        .prompt-card:nth-child(2) { animation-delay: 0.15s; }
+        .prompt-card:nth-child(3) { animation-delay: 0.3s; }
+
+        .prompt-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 30px var(--accent-glow);
+        }
+
+        .prompt-label {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 4px 10px;
+            border-radius: 999px;
+            margin-bottom: 12px;
+        }
+
+        .prompt-label.basic {
+            background: rgba(52,168,83,0.1);
+            color: var(--green);
+        }
+
+        .prompt-label.advanced {
+            background: rgba(66,133,244,0.1);
+            color: var(--accent);
+        }
+
+        .prompt-label.expert {
+            background: rgba(251,188,4,0.1);
+            color: var(--yellow);
+        }
+
+        .prompt-text {
+            font-size: 0.95rem;
+            font-weight: 500;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .prompt-code {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px 20px;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.82rem;
+            color: var(--green);
+            line-height: 1.6;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px; right: 10px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--border);
+            color: var(--text2);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.72rem;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .copy-btn:hover {
+            background: rgba(255,255,255,0.1);
+            color: var(--text);
+        }
+
+        .prompt-desc {
+            font-size: 0.82rem;
+            color: var(--text3);
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        /* --- Expected Results --- */
+        .results-section {
+            margin-bottom: 48px;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+
+        .result-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            transition: all var(--transition);
+        }
+
+        .result-card:hover {
+            border-color: var(--border-hover);
+        }
+
+        .result-icon {
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+        }
+
+        .result-card h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .result-card p {
+            font-size: 0.82rem;
+            color: var(--text2);
+            line-height: 1.5;
+        }
+
+        /* --- Footer --- */
+        .footer {
+            text-align: center;
+            padding-top: 32px;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer p {
+            font-size: 0.75rem;
+            color: var(--text3);
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 600px) {
+            body { padding: 24px 16px; }
+            .steps-grid { grid-template-columns: 1fr 1fr; }
+            .prompt-code { font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header" id="header">
+            <div class="badge">
+                <span class="badge-dot"></span>
+                Codelab Exercise 1
+            </div>
+            <h1>Web Research with Antigravity</h1>
+            <p class="subtitle">
+                This exercise demonstrates how Google Antigravity can autonomously browse the web,
+                extract information, and present structured results — all from a simple prompt.
+            </p>
+        </header>
+
+        <!-- How It Works -->
+        <section class="how-section" id="how-it-works">
+            <h2 class="how-title">How It Works</h2>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-num">1</div>
+                    <h3>Give a Prompt</h3>
+                    <p>Tell the agent what site to visit and what data to extract.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">2</div>
+                    <h3>Agent Browses</h3>
+                    <p>Antigravity opens a browser, navigates, and reads the page content.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">3</div>
+                    <h3>Data Extraction</h3>
+                    <p>The agent identifies relevant information and structures it.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">4</div>
+                    <h3>Results Artifact</h3>
+                    <p>Clean, formatted results are returned as an artifact you can review.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Prompts to Try -->
+        <section class="prompts-section" id="prompts">
+            <h2 class="how-title">Prompts to Try in Antigravity</h2>
+
+            <div class="prompt-card">
+                <span class="prompt-label basic">Basic</span>
+                <p class="prompt-text">Get today's top news headlines from Google News</p>
+                <div class="prompt-code">
+                    <button class="copy-btn" onclick="copyPrompt(this)" id="copy-btn-1">Copy</button>
+                    Visita news.google.com y muéstrame los momentos destacados del momento
+                </div>
+                <p class="prompt-desc">
+                    The agent will open Google News, scan the headlines, and return a summary of the current top stories
+                    organized by topic, including sources and publication times.
+                </p>
+            </div>
+
+            <div class="prompt-card">
+                <span class="prompt-label advanced">Advanced</span>
+                <p class="prompt-text">Get Google Cloud release notes categorized by product</p>
+                <div class="prompt-code">
+                    <button class="copy-btn" onclick="copyPrompt(this)" id="copy-btn-2">Copy</button>
+                    Visit https://cloud.google.com/release-notes and get me a summary of the release notes, categorized by product.
+                </div>
+                <p class="prompt-desc">
+                    This demonstrates deeper data extraction — the agent must navigate a complex documentation site,
+                    identify product categories, and group release notes for a structured summary.
+                </p>
+            </div>
+
+            <div class="prompt-card">
+                <span class="prompt-label expert">Try Your Own</span>
+                <p class="prompt-text">Visit any website with dashboards or data tables</p>
+                <div class="prompt-code">
+                    <button class="copy-btn" onclick="copyPrompt(this)" id="copy-btn-3">Copy</button>
+                    Visit [YOUR_URL_HERE] and extract the key metrics / data from the dashboard. Summarize the findings.
+                </div>
+                <p class="prompt-desc">
+                    Replace the URL with any publicly accessible site that has charts, tables, or structured data.
+                    The agent will attempt to read and summarize the visual and textual content.
+                </p>
+            </div>
+        </section>
+
+        <!-- Expected Results -->
+        <section class="results-section" id="results">
+            <h2 class="how-title">What to Expect</h2>
+            <div class="results-grid">
+                <div class="result-card">
+                    <div class="result-icon">🌐</div>
+                    <h3>Browser Control</h3>
+                    <p>You'll see Antigravity's browser open with a blue border, indicating agent control.</p>
+                </div>
+                <div class="result-card">
+                    <div class="result-icon">🧠</div>
+                    <h3>Thought Process</h3>
+                    <p>The left panel shows the agent's reasoning as it navigates and extracts data.</p>
+                </div>
+                <div class="result-card">
+                    <div class="result-icon">📄</div>
+                    <h3>Generated Artifacts</h3>
+                    <p>Results are presented as formatted artifacts with summaries, categories, and sources.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer" id="footer">
+            <p>Google Cloud Summit 2026 · GDG Codelab · Exercise 1: Web Research</p>
+        </footer>
+    </div>
+
+    <script>
+        function copyPrompt(button) {
+            const codeBlock = button.parentElement;
+            const text = codeBlock.textContent.replace('Copy', '').trim();
+            navigator.clipboard.writeText(text).then(() => {
+                button.textContent = 'Copied!';
+                setTimeout(() => { button.textContent = 'Copy'; }, 1500);
+            });
+        }
+    </script>
+</body>
+</html>

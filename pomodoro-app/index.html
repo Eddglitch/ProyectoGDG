@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A calm and aesthetic Pomodoro timer to boost your productivity.">
+    <title>Pomodoro Flow — Focus Timer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container" id="app">
+        <!-- Background ambient blobs -->
+        <div class="ambient">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+            <div class="blob blob-3"></div>
+        </div>
+
+        <!-- Main Card -->
+        <main class="card" id="main-card">
+            <!-- Header -->
+            <div class="card-header">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    <span class="logo-text">Pomodoro Flow</span>
+                </div>
+                <div class="session-counter" id="session-counter">
+                    <span class="session-label">Sessions</span>
+                    <span class="session-count" id="session-count">0</span>
+                </div>
+            </div>
+
+            <!-- Mode Tabs -->
+            <div class="mode-tabs" id="mode-tabs">
+                <button class="tab active" data-mode="focus" id="tab-focus">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/>
+                    </svg>
+                    Focus
+                </button>
+                <button class="tab" data-mode="short-break" id="tab-short-break">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+                    </svg>
+                    Short Break
+                </button>
+                <button class="tab" data-mode="long-break" id="tab-long-break">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                    </svg>
+                    Long Break
+                </button>
+            </div>
+
+            <!-- Timer Ring -->
+            <div class="timer-container" id="timer-container">
+                <svg class="timer-ring" viewBox="0 0 260 260" id="timer-ring">
+                    <circle class="ring-bg" cx="130" cy="130" r="120" />
+                    <circle class="ring-progress" cx="130" cy="130" r="120" id="ring-progress"
+                        stroke-dasharray="753.98"
+                        stroke-dashoffset="0" />
+                </svg>
+                <div class="timer-display">
+                    <span class="timer-time" id="timer-time">25:00</span>
+                    <span class="timer-status" id="timer-status">Ready to focus</span>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls" id="controls">
+                <button class="btn btn-secondary" id="btn-reset" aria-label="Reset timer" title="Reset">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+                        <polyline points="1 4 1 10 7 10"/>
+                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                    </svg>
+                </button>
+                <button class="btn btn-primary" id="btn-start" aria-label="Start timer">
+                    <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" width="28" height="28" id="icon-play">
+                        <polygon points="6,3 20,12 6,21"/>
+                    </svg>
+                    <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" width="28" height="28" id="icon-pause" style="display:none;">
+                        <rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/>
+                    </svg>
+                </button>
+                <button class="btn btn-secondary" id="btn-skip" aria-label="Skip to next" title="Skip">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+                        <polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Task Input -->
+            <div class="task-section" id="task-section">
+                <input type="text" class="task-input" id="task-input" placeholder="What are you working on?" maxlength="80">
+            </div>
+
+            <!-- Daily Progress -->
+            <div class="progress-section" id="progress-section">
+                <div class="progress-header">
+                    <span class="progress-title">Today's Progress</span>
+                    <span class="progress-detail" id="progress-detail">0 / 8 sessions</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%;"></div>
+                </div>
+                <div class="progress-dots" id="progress-dots">
+                    <span class="dot" data-index="0"></span>
+                    <span class="dot" data-index="1"></span>
+                    <span class="dot" data-index="2"></span>
+                    <span class="dot" data-index="3"></span>
+                    <span class="dot" data-index="4"></span>
+                    <span class="dot" data-index="5"></span>
+                    <span class="dot" data-index="6"></span>
+                    <span class="dot" data-index="7"></span>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Built for the GDG Codelab · Pomodoro Technique&trade;</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

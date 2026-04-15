@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ conference.description }}">
+    <title>{{ conference.name }} — {{ conference.tagline }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Hero Section -->
+    <header class="hero" id="hero">
+        <div class="hero-bg-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                Google Cloud Technologies
+            </div>
+            <h1 class="hero-title">{{ conference.name }}</h1>
+            <p class="hero-tagline">{{ conference.tagline }}</p>
+            <div class="hero-meta">
+                <div class="meta-item">
+                    <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    <span>{{ conference.date }}</span>
+                </div>
+                <div class="meta-item">
+                    <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    <span>{{ conference.location }}</span>
+                </div>
+                <div class="meta-item">
+                    <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    <span>09:00 — 16:30</span>
+                </div>
+            </div>
+            <a href="#schedule" class="hero-cta" id="hero-cta">
+                View Schedule
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/>
+                </svg>
+            </a>
+        </div>
+    </header>
+
+    <!-- Search & Filter Section -->
+    <section class="search-section" id="search-section">
+        <div class="container">
+            <div class="search-bar" id="search-bar">
+                <div class="search-input-wrapper">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                    <input 
+                        type="text" 
+                        id="search-input" 
+                        class="search-input" 
+                        placeholder="Search by title, speaker, or keyword..."
+                        autocomplete="off"
+                    >
+                    <button class="search-clear" id="search-clear" aria-label="Clear search" style="display:none;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="filter-pills" id="filter-pills">
+                    <button class="pill active" data-category="" id="filter-all">All Talks</button>
+                    {% for cat in categories %}
+                    <button class="pill" data-category="{{ cat }}" id="filter-{{ cat | lower | replace(' ', '-') | replace('&', 'and') }}">{{ cat }}</button>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Schedule Section -->
+    <section class="schedule-section" id="schedule">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Conference Schedule</h2>
+                <p class="section-subtitle">A full day of innovation and learning</p>
+            </div>
+            <div class="timeline" id="timeline">
+                {% for talk in talks %}
+                <div class="talk-card {% if talk.id == 'LUNCH' %}talk-break{% endif %}" 
+                     data-talk-id="{{ talk.id }}"
+                     data-categories="{{ talk.categories | join(',') | lower }}"
+                     data-title="{{ talk.title | lower }}"
+                     data-speakers="{% for s in talk.speaker_objects %}{{ s.first_name }} {{ s.last_name }} {% endfor %}"
+                     id="talk-{{ talk.id }}">
+                    
+                    <div class="talk-time-col">
+                        <span class="talk-time">{{ talk.time.split(' - ')[0] }}</span>
+                        <span class="talk-duration">{{ talk.duration_min }} min</span>
+                    </div>
+
+                    <div class="talk-connector">
+                        <div class="connector-dot"></div>
+                        <div class="connector-line"></div>
+                    </div>
+
+                    <div class="talk-content">
+                        {% if talk.id == 'LUNCH' %}
+                        <div class="break-card">
+                            <div class="break-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+                                    <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+                                    <line x1="6" y1="1" x2="6" y2="4"/>
+                                    <line x1="10" y1="1" x2="10" y2="4"/>
+                                    <line x1="14" y1="1" x2="14" y2="4"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="break-title">{{ talk.title }}</h3>
+                                <p class="break-desc">{{ talk.description }}</p>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="card-inner">
+                            <div class="card-header">
+                                <div class="card-categories">
+                                    {% for cat in talk.categories %}
+                                    <span class="category-tag {% if 'AI' in cat %}tag-ai{% else %}tag-infra{% endif %}">{{ cat }}</span>
+                                    {% endfor %}
+                                </div>
+                                <span class="talk-id">{{ talk.id }}</span>
+                            </div>
+                            <h3 class="talk-title">{{ talk.title }}</h3>
+                            <p class="talk-description">{{ talk.description }}</p>
+                            <div class="talk-speakers">
+                                {% for speaker in talk.speaker_objects %}
+                                <a href="{{ speaker.linkedin }}" target="_blank" rel="noopener noreferrer" class="speaker-chip" id="speaker-{{ speaker.id }}">
+                                    <div class="speaker-avatar">
+                                        {{ speaker.first_name[0] }}{{ speaker.last_name[0] }}
+                                    </div>
+                                    <div class="speaker-info">
+                                        <span class="speaker-name">{{ speaker.first_name }} {{ speaker.last_name }}</span>
+                                        <span class="speaker-link">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                            </svg>
+                                            LinkedIn
+                                        </span>
+                                    </div>
+                                </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- No results message -->
+            <div class="no-results" id="no-results" style="display: none;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    <line x1="8" y1="8" x2="14" y2="14"/><line x1="14" y1="8" x2="8" y2="14"/>
+                </svg>
+                <h3>No talks found</h3>
+                <p>Try a different search term or category filter.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Speakers Section -->
+    <section class="speakers-section" id="speakers">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our Speakers</h2>
+                <p class="section-subtitle">Learn from industry-leading Google Cloud experts</p>
+            </div>
+            <div class="speakers-grid">
+                {% for speaker in speakers %}
+                <a href="{{ speaker.linkedin }}" target="_blank" rel="noopener noreferrer" class="speaker-card" id="speaker-card-{{ speaker.id }}">
+                    <div class="speaker-card-avatar">
+                        {{ speaker.first_name[0] }}{{ speaker.last_name[0] }}
+                    </div>
+                    <h4 class="speaker-card-name">{{ speaker.first_name }} {{ speaker.last_name }}</h4>
+                    <span class="speaker-card-linkedin">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                        View Profile
+                    </span>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-logo">{{ conference.name }}</p>
+                <p class="footer-text">{{ conference.date }} · {{ conference.location }}</p>
+                <p class="footer-copy">&copy; 2026 Google Cloud Summit. Built for the GDG Codelab.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
