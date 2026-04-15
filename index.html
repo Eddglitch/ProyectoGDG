@@ -252,23 +252,31 @@
         .hero-circle::before {
             content: '';
             position: absolute;
-            width: 12px;
-            height: 12px;
+            width: 14px;
+            height: 14px;
             background: var(--accent);
             border-radius: 50%;
-            top: -6px;
+            top: -7px;
             left: 50%;
             transform: translateX(-50%);
+            box-shadow: 0 0 10px var(--accent);
+            transition: transform 0.2s;
         }
-
-        @keyframes spinSlow {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        
+        .hero-circle:hover::before {
+            transform: translateX(-50%) scale(1.5);
         }
 
         .hero-circle-inner {
-            animation: spinSlow 30s linear infinite reverse;
             text-align: center;
+            user-select: none;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .hero-circle-num {
@@ -827,30 +835,115 @@
             });
         });
 
-        // Random Pulse effect for the 04 Exercises Circle
-        const heroCircle = document.querySelector('.hero-circle');
-        if(heroCircle) {
-            // Add transition for smooth glow
-            heroCircle.style.transition = 'box-shadow 0.8s ease-out';
+        // ─── INTERACTIVE WHEEL MINIGAME ───
+        const wheel = document.querySelector('.hero-circle');
+        const wheelInner = document.querySelector('.hero-circle-inner');
+        const wheelNum = document.querySelector('.hero-circle-num');
+        const wheelText = document.querySelector('.hero-circle-text');
+        
+        if (wheel) {
+            wheel.style.animation = 'none';
+            wheelInner.style.animation = 'none';
+            wheel.style.cursor = 'grab';
             
-            function randomPulse() {
-                // Random intensity and blur for the glow
-                const blur = Math.floor(Math.random() * 50) + 20; 
-                const spread = Math.floor(Math.random() * 20) + 5;
-                const opacity = (Math.random() * 0.4 + 0.2).toFixed(2);
-                
-                heroCircle.style.boxShadow = `0 0 ${blur}px ${spread}px rgba(155, 109, 255, ${opacity}), inset 0 0 ${blur/2}px rgba(155, 109, 255, ${opacity/2})`;
-                
-                // Remove glow after a short moment to complete the pulse
-                setTimeout(() => {
-                    heroCircle.style.boxShadow = '0 0 0 0 rgba(155, 109, 255, 0), inset 0 0 0 rgba(155, 109, 255, 0)';
-                }, 800); // 800ms fade down
-                
-                // Trigger the next pulse randomly between 2 to 7 seconds
-                setTimeout(randomPulse, Math.random() * 5000 + 2000);
+            const projects = [
+                { num: '01', title: 'Web Research', url: 'web-research/index.html' },
+                { num: '02', title: 'Tech Conference', url: 'conference-app-static/index.html' },
+                { num: '03', title: 'Pomodoro Timer', url: 'pomodoro-app/index.html' },
+                { num: '04', title: 'Order Tests', url: 'https://github.com/Eddglitch/ProyectoGDG/tree/main/order-service' }
+            ];
+
+            let currentRot = 0;
+            let isDragging = false;
+            let startAngle = 0;
+            let currentProj = -1;
+            let hasDragged = false;
+            
+            function getAngle(e) {
+                const rect = wheel.getBoundingClientRect();
+                const cx = rect.left + rect.width / 2;
+                const cy = rect.top + rect.height / 2;
+                let px = e.touches ? e.touches[0].clientX : e.clientX;
+                let py = e.touches ? e.touches[0].clientY : e.clientY;
+                return Math.atan2(py - cy, px - cx) * (180 / Math.PI) + 90; 
             }
-            // Start cycle
-            setTimeout(randomPulse, 1000);
+
+            function updateDisplay() {
+                let normalizedRot = currentRot % 360;
+                if (normalizedRot < 0) normalizedRot += 360;
+                let index = Math.floor((360 - normalizedRot + 45) / 90) % 4; 
+                
+                if (index !== currentProj) {
+                    currentProj = index;
+                    const proj = projects[index];
+                    
+                    wheelInner.style.opacity = 0;
+                    wheelInner.style.transform = `rotate(${-currentRot}deg) scale(0.9)`;
+                    
+                    setTimeout(() => {
+                        wheelNum.textContent = proj.num;
+                        wheelText.textContent = proj.title;
+                        wheelInner.style.opacity = 1;
+                        wheelInner.style.transform = `rotate(${-currentRot}deg) scale(1)`;
+                    }, 150);
+                } else {
+                    wheelInner.style.transform = `rotate(${-currentRot}deg)`;
+                }
+            }
+
+            function onStart(e) {
+                isDragging = true;
+                hasDragged = false;
+                wheel.style.cursor = 'grabbing';
+                wheel.style.transition = 'none';
+                wheelInner.style.transition = 'none';
+                startAngle = getAngle(e) - currentRot;
+            }
+
+            function onMove(e) {
+                if (!isDragging) return;
+                hasDragged = true;
+                currentRot = getAngle(e) - startAngle;
+                wheel.style.transform = `rotate(${currentRot}deg)`;
+                updateDisplay();
+                e.preventDefault();
+            }
+
+            function onEnd() {
+                if (!isDragging) return;
+                isDragging = false;
+                wheel.style.cursor = 'grab';
+                
+                let snapAngle = Math.round(currentRot / 90) * 90;
+                wheel.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                wheelInner.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                
+                currentRot = snapAngle;
+                wheel.style.transform = `rotate(${currentRot}deg)`;
+                updateDisplay();
+            }
+
+            wheel.addEventListener('mousedown', onStart);
+            window.addEventListener('mousemove', onMove, {passive: false});
+            window.addEventListener('mouseup', onEnd);
+            wheel.addEventListener('touchstart', onStart, {passive: false});
+            window.addEventListener('touchmove', onMove, {passive: false});
+            window.addEventListener('touchend', onEnd);
+
+            wheelInner.addEventListener('click', () => {
+                if(!hasDragged) {
+                    const url = projects[currentProj].url;
+                    if(url.startsWith('http')) {
+                        window.open(url, '_blank');
+                    } else {
+                        window.location.href = url;
+                    }
+                }
+            });
+
+            // Init state explicitly with index 3 to show "04 Exercises"
+            currentRot = -90; 
+            updateDisplay();
         }
 
         // Smooth scroll for CTA
