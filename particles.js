@@ -11,8 +11,8 @@
 
     // Dynamically track bounding rects of main UI elements for physical repulsion
     function updateUIRects() {
-        // Collect various cards and interactive blocks across the 4 apps
-        const elements = document.querySelectorAll('.speaker-card, .step-card, .result-card, .prompt-card, .hero-left, .schedule-item, .timer-display, .info-block, .card-inner');
+        // Collect various cards and interactive blocks across the 4 apps PLUS common text elements
+        const elements = document.querySelectorAll('.speaker-card, .step-card, .result-card, .prompt-card, .hero-left, .schedule-item, .timer-display, .info-block, .card-inner, p, h1, h2, h3, a, button, input');
         uiRects = Array.from(elements).map(el => {
             const rect = el.getBoundingClientRect();
             return { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom, width: rect.width, height: rect.height };
@@ -24,16 +24,16 @@
         height = canvas.height = window.innerHeight;
         particles = [];
         
-        // Dense vapor calculation
-        const particleCount = Math.floor((width * height) / 3200); 
+        // Dense vapor calculation (Increased density for more flow)
+        const particleCount = Math.floor((width * height) / 1800); 
         for (let i = 0; i < particleCount; i++) {
             particles.push({
                 x: Math.random() * width,
                 y: Math.random() * height,
                 radius: Math.random() * 2 + 1,
-                vx: (Math.random() - 0.5) * 1,
-                vy: (Math.random() - 0.5) * 1,
-                baseAlpha: Math.random() * 0.4 + 0.1
+                vx: (Math.random() - 0.5) * 1.5, // Faster flow overall
+                vy: (Math.random() - 0.5) * 1.5,
+                baseAlpha: Math.random() * 0.25 + 0.05 // Dimmer but visible
             });
         }
         updateUIRects();
@@ -70,7 +70,7 @@
 
             // ─── Physical Collision with UI Elements ───
             uiRects.forEach(rect => {
-                const margin = 30; // Repulsion field radius
+                const margin = 20; // Repulsion field radius (smaller for text elements)
                 if (p.x > rect.left - margin && p.x < rect.right + margin &&
                     p.y > rect.top - margin && p.y < rect.bottom + margin) {
                     
@@ -102,20 +102,20 @@
                 const dy = p.y - p2.y;
                 const distSq = dx*dx + dy*dy;
                 
-                if (distSq < 3500) { 
+                if (distSq < 2500) { 
                     const dist = Math.sqrt(distSq);
                     
                     // Draw vapor web
                     ctx.beginPath();
-                    ctx.strokeStyle = `rgba(155, 109, 255, ${0.18 - dist/400})`;
+                    ctx.strokeStyle = `rgba(155, 109, 255, ${0.12 - dist/400})`;
                     ctx.lineWidth = 1;
                     ctx.moveTo(p.x, p.y);
                     ctx.lineTo(p2.x, p2.y);
                     ctx.stroke();
                     
                     // Particle collision (repulsion to simulate dense gas)
-                    if (dist < 18) {
-                        const force = 0.08;
+                    if (dist < 15) {
+                        const force = 0.05;
                         p.vx += (dx/dist) * force;
                         p.vy += (dy/dist) * force;
                         p2.vx -= (dx/dist) * force;
