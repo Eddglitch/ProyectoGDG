@@ -235,48 +235,103 @@
             overflow: hidden;
         }
 
-        /* Decorative circle */
-        .hero-circle {
-            width: 320px;
-            height: 320px;
-            border: 2px solid var(--accent);
-            border-radius: 50%;
+        /* ─── INTERACTIVE BRUTALIST DIAL ─── */
+        .hero-wheel-container {
             position: relative;
+            width: 360px;
+            height: 360px;
             display: flex;
             align-items: center;
             justify-content: center;
-            animation: spinSlow 30s linear infinite;
-            transition: box-shadow 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            user-select: none;
         }
 
-        .hero-circle::before {
-            content: '';
+        /* Fixed Top Selector Lens */
+        .wheel-marker {
             position: absolute;
-            width: 14px;
-            height: 14px;
-            background: var(--accent);
-            border-radius: 50%;
-            top: -7px;
+            top: 0;
             left: 50%;
             transform: translateX(-50%);
-            box-shadow: 0 0 10px var(--accent);
-            transition: transform 0.2s;
+            width: 40px;
+            height: 20px;
+            border: 2px solid var(--accent);
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        
-        .hero-circle:hover::before {
-            transform: translateX(-50%) scale(1.5);
+        .wheel-marker::after {
+            content: '';
+            width: 0; height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 6px solid var(--accent);
+            transform: translateY(10px);
         }
 
+        /* Rotating Outer Dial */
+        .hero-circle {
+            width: 320px;
+            height: 320px;
+            border: 2px dashed rgba(155, 109, 255, 0.4);
+            border-radius: 50%;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            cursor: grab;
+            transition: box-shadow 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .hero-circle:active {
+            cursor: grabbing;
+        }
+
+        /* The little numbers around the dial */
+        .wheel-node {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            margin-top: -20px;
+            margin-left: -20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            font-style: italic;
+            color: var(--gray-dim);
+            transform: rotate(var(--a)) translateY(-160px) rotate(calc(var(--a) * -1));
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+        /* When a node is active, JS will add this class */
+        .wheel-node.active {
+            color: var(--accent);
+            text-shadow: 0 0 10px rgba(155, 109, 255, 0.5);
+            font-weight: bold;
+        }
+
+        /* Fixed Center Display */
         .hero-circle-inner {
+            position: absolute;
             text-align: center;
-            user-select: none;
             cursor: pointer;
-            width: 100%;
-            height: 100%;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(155, 109, 255, 0.05) 0%, transparent 70%);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            z-index: 5;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .hero-circle-inner:hover {
+            background: radial-gradient(circle, rgba(155, 109, 255, 0.15) 0%, transparent 70%);
+            transform: scale(1.05);
         }
 
         .hero-circle-num {
@@ -676,10 +731,20 @@
         </div>
 
         <div class="hero-right">
-            <div class="hero-circle">
+            <div class="hero-wheel-container">
+                <div class="wheel-marker"></div>
+                <div class="hero-circle" id="wheel-dial">
+                    <!-- Project Nodes around the dial -->
+                    <!-- Note: angle mapping matches indexes 0,1,2,3 -> logic assumes top is active -->
+                    <div class="wheel-node" style="--a: 0deg;" id="node-0">01</div>
+                    <div class="wheel-node" style="--a: 270deg;" id="node-1">02</div>
+                    <div class="wheel-node" style="--a: 180deg;" id="node-2">03</div>
+                    <div class="wheel-node" style="--a: 90deg;" id="node-3">04</div>
+                </div>
+                <!-- Fixed Center -->
                 <div class="hero-circle-inner">
-                    <div class="hero-circle-num">04</div>
-                    <div class="hero-circle-text">Exercises</div>
+                    <div class="hero-circle-num" id="wheel-num">00</div>
+                    <div class="hero-circle-text" id="wheel-text">Spin to Select</div>
                 </div>
             </div>
 
@@ -836,16 +901,12 @@
         });
 
         // ─── INTERACTIVE WHEEL MINIGAME ───
-        const wheel = document.querySelector('.hero-circle');
+        const wheel = document.getElementById('wheel-dial');
         const wheelInner = document.querySelector('.hero-circle-inner');
-        const wheelNum = document.querySelector('.hero-circle-num');
-        const wheelText = document.querySelector('.hero-circle-text');
+        const wheelNum = document.getElementById('wheel-num');
+        const wheelText = document.getElementById('wheel-text');
         
         if (wheel) {
-            wheel.style.animation = 'none';
-            wheelInner.style.animation = 'none';
-            wheel.style.cursor = 'grab';
-            
             const projects = [
                 { num: '01', title: 'Web Research', url: 'web-research/index.html' },
                 { num: '02', title: 'Tech Conference', url: 'conference-app-static/index.html' },
@@ -869,34 +930,38 @@
             }
 
             function updateDisplay() {
+                // Normalize rotation
                 let normalizedRot = currentRot % 360;
                 if (normalizedRot < 0) normalizedRot += 360;
+                // Index mapped to rotation segments (0deg -> 01, 90deg -> 04, 180deg -> 03, 270deg -> 02)
                 let index = Math.floor((360 - normalizedRot + 45) / 90) % 4; 
                 
                 if (index !== currentProj) {
                     currentProj = index;
                     const proj = projects[index];
                     
+                    // Update active node styling
+                    document.querySelectorAll('.wheel-node').forEach((node, i) => {
+                        node.classList.toggle('active', i === index);
+                    });
+
+                    // Update Fixed Center text with pop animation
                     wheelInner.style.opacity = 0;
-                    wheelInner.style.transform = `rotate(${-currentRot}deg) scale(0.9)`;
+                    wheelInner.style.transform = `scale(0.85)`;
                     
                     setTimeout(() => {
                         wheelNum.textContent = proj.num;
                         wheelText.textContent = proj.title;
                         wheelInner.style.opacity = 1;
-                        wheelInner.style.transform = `rotate(${-currentRot}deg) scale(1)`;
+                        wheelInner.style.transform = `scale(1)`;
                     }, 150);
-                } else {
-                    wheelInner.style.transform = `rotate(${-currentRot}deg)`;
                 }
             }
 
             function onStart(e) {
                 isDragging = true;
                 hasDragged = false;
-                wheel.style.cursor = 'grabbing';
                 wheel.style.transition = 'none';
-                wheelInner.style.transition = 'none';
                 startAngle = getAngle(e) - currentRot;
             }
 
@@ -905,6 +970,12 @@
                 hasDragged = true;
                 currentRot = getAngle(e) - startAngle;
                 wheel.style.transform = `rotate(${currentRot}deg)`;
+                // Counter-rotate the nodes so they stay upright
+                const nodes = document.querySelectorAll('.wheel-node');
+                nodes.forEach(node => {
+                    const a = node.style.getPropertyValue('--a');
+                    node.style.transform = `rotate(${a}) translateY(-160px) rotate(calc(${a} * -1 - ${currentRot}deg))`;
+                });
                 updateDisplay();
                 e.preventDefault();
             }
@@ -912,17 +983,27 @@
             function onEnd() {
                 if (!isDragging) return;
                 isDragging = false;
-                wheel.style.cursor = 'grab';
                 
                 let snapAngle = Math.round(currentRot / 90) * 90;
-                wheel.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-                wheelInner.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                wheel.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
                 
                 currentRot = snapAngle;
                 wheel.style.transform = `rotate(${currentRot}deg)`;
+                // Animate nodes upright counter-rotation
+                const nodes = document.querySelectorAll('.wheel-node');
+                nodes.forEach(node => {
+                    node.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                    const a = node.style.getPropertyValue('--a');
+                    node.style.transform = `rotate(${a}) translateY(-160px) rotate(calc(${a} * -1 - ${currentRot}deg))`;
+                    
+                    // Remove transition after it's done so it doesn't lag when dragging again
+                    setTimeout(() => node.style.transition = 'color 0.3s, text-shadow 0.3s', 500);
+                });
+                
                 updateDisplay();
             }
 
+            // Click down on the wheel OR the center triggers rotation (since center is inside the container)
             wheel.addEventListener('mousedown', onStart);
             window.addEventListener('mousemove', onMove, {passive: false});
             window.addEventListener('mouseup', onEnd);
@@ -943,6 +1024,12 @@
 
             // Init state explicitly with index 3 to show "04 Exercises"
             currentRot = -90; 
+            wheel.style.transform = `rotate(${currentRot}deg)`;
+            const nodes = document.querySelectorAll('.wheel-node');
+            nodes.forEach(node => {
+                const a = node.style.getPropertyValue('--a');
+                node.style.transform = `rotate(${a}) translateY(-160px) rotate(calc(${a} * -1 - ${currentRot}deg))`;
+            });
             updateDisplay();
         }
 
