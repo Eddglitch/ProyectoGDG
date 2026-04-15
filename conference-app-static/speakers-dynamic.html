@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Speakers View | GDG Conference</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --surface: #111111;
+            --border: #222;
+            --accent: #9B6DFF;
+            --text-main: #f5f5f5;
+            --text-muted: #888;
+            --sans: 'Space Grotesk', sans-serif;
+            --serif: 'Instrument Serif', serif;
+            --mono: 'JetBrains Mono', monospace;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            background: var(--bg); color: var(--text-main); 
+            font-family: var(--sans); min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            overflow-x: hidden;
+        }
+
+        .header {
+            text-align: center; margin-bottom: 4rem; margin-top: 2rem;
+            animation: fadeInDown 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0; transform: translateY(-20px);
+        }
+
+        .header-tag {
+            font-family: var(--mono); font-size: 0.8rem; color: var(--accent);
+            text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 1rem;
+            display: inline-block; border: 1px solid var(--border); padding: 6px 12px;
+        }
+
+        .header-title {
+            font-family: var(--serif); font-size: 4rem; font-weight: 400;
+            line-height: 1; letter-spacing: -0.02em;
+        }
+        .header-title em { font-style: italic; color: var(--text-muted); }
+
+        /* Container for Drag & Scroll */
+        .carousel-wrapper {
+            width: 100%; max-width: 1400px;
+            padding: 0 40px 60px;
+            perspective: 1500px;
+        }
+
+        .speakers-slider {
+            display: flex; gap: 30px; 
+            overflow-x: auto; cursor: grab; padding: 20px 0;
+            scrollbar-width: none; /* Firefox */
+        }
+        .speakers-slider::-webkit-scrollbar { display: none; }
+        .speakers-slider:active { cursor: grabbing; }
+
+        /* 3D Speaker Card */
+        .speaker-card {
+            flex: 0 0 320px;
+            height: 440px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .card-inner {
+            width: 100%; height: 100%;
+            background: var(--surface); border: 1px solid var(--border);
+            padding: 30px; display: flex; flex-direction: column;
+            position: relative; overflow: hidden;
+            transform-style: preserve-3d;
+            transition: all 0.3s ease;
+        }
+
+        /* Ambient Glow effect inside card */
+        .card-glow {
+            position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle at 50% 50%, rgba(155,109,255,0.1), transparent 60%);
+            opacity: 0; transition: opacity 0.4s ease; mix-blend-mode: screen;
+            pointer-events: none;
+        }
+        .speaker-card:hover .card-glow { opacity: 1; }
+
+        /* Canvas Background */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.6; /* Non-invasive */
+        }
+
+        .card-header {
+            transform: translateZ(30px);
+            margin-bottom: auto; z-index: 2;
+        }
+
+        .role-tag {
+            font-family: var(--mono); font-size: 0.65rem; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 0.1em;
+            margin-bottom: 2rem; display: block;
+        }
+
+        .avatar-box {
+            width: 80px; height: 80px;
+            background: linear-gradient(135deg, var(--accent), #4285F4);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; font-weight: 700; color: #fff;
+            margin-bottom: 20px;
+            transform: translateZ(50px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .speaker-card:hover .avatar-box {
+            transform: translateZ(70px) scale(1.1);
+            background: linear-gradient(135deg, #fff, var(--accent));
+            color: var(--bg);
+        }
+
+        .speaker-name {
+            font-family: var(--serif); font-size: 2.2rem;
+            line-height: 1.1; margin-bottom: 10px;
+            transform: translateZ(40px);
+            transition: color 0.3s ease;
+        }
+        .speaker-card:hover .speaker-name { color: var(--accent); }
+
+        .speaker-company {
+            font-size: 0.85rem; color: var(--text-muted);
+            transform: translateZ(30px);
+        }
+
+        /* Dynamic Reveal Bottom Panel */
+        .card-footer {
+            height: 0; opacity: 0; overflow: hidden;
+            transform: translateZ(20px) translateY(20px);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border-top: 1px solid transparent;            
+        }
+
+        .speaker-card:hover .card-footer {
+            height: 100px; opacity: 1; padding-top: 20px; margin-top: 20px;
+            border-top-color: var(--border);
+            transform: translateZ(20px) translateY(0);
+        }
+
+        .social-link {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-family: var(--mono); font-size: 0.75rem; color: var(--bg);
+            background: var(--text-main); padding: 8px 16px;
+            text-transform: uppercase; letter-spacing: 0.05em;
+            transition: all 0.3s ease; cursor: pointer;
+        }
+        .social-link:hover {
+            background: var(--accent); color: #fff;
+        }
+
+        /* Decorative animated corner borders */
+        .corner {
+            position: absolute; width: 20px; height: 20px;
+            border: 2px solid var(--accent); opacity: 0;
+            transition: all 0.4s ease;
+        }
+        .c-tl { top: 0; left: 0; border-right: none; border-bottom: none; transform: translate(-10px, -10px); }
+        .c-tr { top: 0; right: 0; border-left: none; border-bottom: none; transform: translate(10px, -10px); }
+        .c-bl { bottom: 0; left: 0; border-right: none; border-top: none; transform: translate(-10px, 10px); }
+        .c-br { bottom: 0; right: 0; border-left: none; border-top: none; transform: translate(10px, 10px); }
+
+        .speaker-card:hover .corner { opacity: 1; transform: translate(0,0); }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .speaker-card { flex: 0 0 280px; }
+            .header-title { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="header">
+        <span class="header-tag">Interactive Component</span>
+        <h1 class="header-title">Featured <em>Speakers</em></h1>
+    </div>
+
+    <div class="carousel-wrapper">
+        <div class="speakers-slider" id="slider">
+            <!-- Speaker 1 -->
+            <div class="speaker-card" data-tilt>
+                <div class="card-inner">
+                    <div class="card-glow"></div>
+                    <div class="corner c-tl"></div><div class="corner c-tr"></div>
+                    <div class="corner c-bl"></div><div class="corner c-br"></div>
+                    
+                    <div class="card-header">
+                        <span class="role-tag">Keynote Speaker</span>
+                        <div class="avatar-box">MC</div>
+                        <h3 class="speaker-name">Maria<br>Chen</h3>
+                        <p class="speaker-company">Lead AI Scientist / Google Cloud</p>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <p style="font-size: 0.8rem; color: #888; margin-bottom: 12px; line-height: 1.5;">Leading the next generation of multimodal LLMs and foundation model capabilities.</p>
+                        <a class="social-link" href="#">LinkedIn ↗</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Speaker 2 -->
+            <div class="speaker-card" data-tilt>
+                <div class="card-inner">
+                    <div class="card-glow"></div>
+                    <div class="corner c-tl"></div><div class="corner c-tr"></div><div class="corner c-bl"></div><div class="corner c-br"></div>
+                    <div class="card-header">
+                        <span class="role-tag">Developer Relations</span>
+                        <div class="avatar-box">JR</div>
+                        <h3 class="speaker-name">James<br>Rodriguez</h3>
+                        <p class="speaker-company">Principal Engineer / GCP</p>
+                    </div>
+                    <div class="card-footer">
+                        <p style="font-size: 0.8rem; color: #888; margin-bottom: 12px; line-height: 1.5;">Building robust scalable architectures for the enterprise environment.</p>
+                        <a class="social-link" href="#">LinkedIn ↗</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Speaker 3 -->
+            <div class="speaker-card" data-tilt>
+                <div class="card-inner">
+                    <div class="card-glow"></div>
+                    <div class="corner c-tl"></div><div class="corner c-tr"></div><div class="corner c-bl"></div><div class="corner c-br"></div>
+                    <div class="card-header">
+                        <span class="role-tag">ML Architecture</span>
+                        <div class="avatar-box">AP</div>
+                        <h3 class="speaker-name">Aisha<br>Patel</h3>
+                        <p class="speaker-company">Director of AI / Vertex</p>
+                    </div>
+                    <div class="card-footer">
+                        <p style="font-size: 0.8rem; color: #888; margin-bottom: 12px; line-height: 1.5;">Specialized in MLOps, deep learning pipelines, and model deployments.</p>
+                        <a class="social-link" href="#">LinkedIn ↗</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Speaker 4 -->
+            <div class="speaker-card" data-tilt>
+                <div class="card-inner">
+                    <div class="card-glow"></div>
+                    <div class="corner c-tl"></div><div class="corner c-tr"></div><div class="corner c-bl"></div><div class="corner c-br"></div>
+                    <div class="card-header">
+                        <span class="role-tag">Infrastructure</span>
+                        <div class="avatar-box">YT</div>
+                        <h3 class="speaker-name">Yuki<br>Tanaka</h3>
+                        <p class="speaker-company">Cloud Architect / Firebase</p>
+                    </div>
+                    <div class="card-footer">
+                        <p style="font-size: 0.8rem; color: #888; margin-bottom: 12px; line-height: 1.5;">Author of modern NoSQL modeling paradigms and serverless scaling.</p>
+                        <a class="social-link" href="#">LinkedIn ↗</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Vanilla JS for 3D Tilt and Drag scrolling -->
+    <script>
+        // 1. Drag to scroll logic
+        const slider = document.getElementById('slider');
+        let isDown = false, startX, scrollLeft;
+
+        slider.addEventListener('mousedown', (e) => {
+            isDown = true;
+            slider.style.cursor = 'grabbing';
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+        });
+        slider.addEventListener('mouseleave', () => { isDown = false; slider.style.cursor = 'grab'; });
+        slider.addEventListener('mouseup', () => { isDown = false; slider.style.cursor = 'grab'; });
+        slider.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const walk = (x - startX) * 2; 
+            slider.scrollLeft = scrollLeft - walk;
+        });
+
+        // 2. 3D Tilt Effect
+        const cards = document.querySelectorAll('.speaker-card');
+        
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Calculate rotation (max 15 degrees)
+                const rotateY = -1 * ((x / rect.width) * 30 - 15);
+                const rotateX = ((y / rect.height) * 30 - 15);
+                
+                // Shift glow reflection
+                const glow = card.querySelector('.card-glow');
+                glow.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+
+                card.querySelector('.card-inner').style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.querySelector('.card-inner').style.transform = `rotateX(0deg) rotateY(0deg)`;
+                card.querySelector('.card-glow').style.transform = `translate(0, 0)`;
+            });
+        });
+
+        // 3. Dense Vapor Particle System with Physics & Elements Repulsion
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, particles = [];
+        let cardsRects = [];
+
+        // Track bounding rectangles of cards to calculate physical collisions
+        function updateCardRects() {
+            cardsRects = Array.from(document.querySelectorAll('.speaker-card')).map(card => {
+                const rect = card.getBoundingClientRect();
+                return { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom, width: rect.width, height: rect.height };
+            });
+        }
+
+        function initCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            particles = [];
+            
+            // Dense vapor calculation
+            const particleCount = Math.floor((width * height) / 3200); 
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    radius: Math.random() * 2 + 1,
+                    vx: (Math.random() - 0.5) * 1,
+                    vy: (Math.random() - 0.5) * 1,
+                    baseAlpha: Math.random() * 0.4 + 0.1
+                });
+            }
+            updateCardRects();
+        }
+
+        // Always keep tracking elements since they move with scroll and drag
+        window.addEventListener('resize', initCanvas);
+        window.addEventListener('scroll', updateCardRects);
+        if(slider) { slider.addEventListener('scroll', updateCardRects); }
+        setInterval(updateCardRects, 100);
+
+        function drawParticles() {
+            // Slight clear to create trails / vapor blur effect
+            ctx.fillStyle = 'rgba(10, 10, 10, 0.4)';
+            ctx.fillRect(0, 0, width, height);
+            
+            particles.forEach((p, index) => {
+                // Apply subtle wind and upward vapor drift
+                p.vx += (Math.random() - 0.5) * 0.08;
+                p.vy += (Math.random() - 0.6) * 0.08; 
+
+                // Air friction (damping)
+                p.vx *= 0.96;
+                p.vy *= 0.96;
+
+                // Update position
+                p.x += p.vx;
+                p.y += p.vy;
+
+                // Screen wrapping to ensure viewport is always filled
+                if (p.x < -20) p.x = width + 20;
+                if (p.x > width + 20) p.x = -20;
+                if (p.y < -20) p.y = height + 20;
+                if (p.y > height + 20) p.y = -20;
+
+                // ─── Physical Collision with UI Elements ───
+                cardsRects.forEach(rect => {
+                    const margin = 30; // Repulsion field radius
+                    // Check if particle is near card's bounding box
+                    if (p.x > rect.left - margin && p.x < rect.right + margin &&
+                        p.y > rect.top - margin && p.y < rect.bottom + margin) {
+                        
+                        // Push outward from the center of the card
+                        const cx = rect.left + rect.width / 2;
+                        const cy = rect.top + rect.height / 2;
+                        
+                        const dx = p.x - cx;
+                        const dy = p.y - cy;
+                        const dist = Math.sqrt(dx*dx + dy*dy);
+                        
+                        if (dist > 0) {
+                            const force = 300 / (dist * dist); 
+                            p.vx += (dx / dist) * force;
+                            p.vy += (dy / dist) * force;
+                        }
+                    }
+                });
+
+                // Render individual particle
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(155, 109, 255, ${p.baseAlpha})`;
+                ctx.fill();
+
+                // ─── Cloud / Inter-particle physics ───
+                for (let j = index + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dx = p.x - p2.x;
+                    const dy = p.y - p2.y;
+                    const distSq = dx*dx + dy*dy;
+                    
+                    if (distSq < 3500) { 
+                        const dist = Math.sqrt(distSq);
+                        
+                        // Draw vapor web
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(155, 109, 255, ${0.18 - dist/400})`;
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                        
+                        // Particle collision (repulsion to simulate dense gas)
+                        if (dist < 18) {
+                            const force = 0.08;
+                            p.vx += (dx/dist) * force;
+                            p.vy += (dy/dist) * force;
+                            p2.vx -= (dx/dist) * force;
+                            p2.vy -= (dy/dist) * force;
+                        }
+                    }
+                }
+            });
+            requestAnimationFrame(drawParticles);
+        }
+
+        initCanvas();
+        drawParticles();
+
+    </script>
+</body>
+</html>
