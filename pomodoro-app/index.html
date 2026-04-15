@@ -3,132 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A calm and aesthetic Pomodoro timer to boost your productivity.">
-    <title>Pomodoro Flow — Focus Timer</title>
+    <meta name="description" content="Pomodoro Flow — An editorial-styled productivity timer.">
+    <title>Pomodoro Flow — Timer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="app-container" id="app">
-        <!-- Background ambient blobs -->
-        <div class="ambient">
-            <div class="blob blob-1"></div>
-            <div class="blob blob-2"></div>
-            <div class="blob blob-3"></div>
+    <!-- NAV -->
+    <nav class="nav" id="nav">
+        <div class="nav-brand">
+            <span class="nav-logo">PMD</span>
+            <span class="nav-dot"></span>
         </div>
+        <span class="nav-title">Pomodoro Flow</span>
+        <a href="../" class="nav-tag">← Back</a>
+    </nav>
 
-        <!-- Main Card -->
-        <main class="card" id="main-card">
-            <!-- Header -->
-            <div class="card-header">
-                <div class="logo">
-                    <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                    <span class="logo-text">Pomodoro Flow</span>
-                </div>
-                <div class="session-counter" id="session-counter">
-                    <span class="session-label">Sessions</span>
-                    <span class="session-count" id="session-count">0</span>
-                </div>
-            </div>
-
-            <!-- Mode Tabs -->
-            <div class="mode-tabs" id="mode-tabs">
-                <button class="tab active" data-mode="focus" id="tab-focus">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/>
-                    </svg>
-                    Focus
+    <!-- MAIN -->
+    <main class="main">
+        <!-- Left: Timer -->
+        <section class="timer-section">
+            <div class="timer-mode-bar">
+                <button class="mode-btn active" data-mode="focus" id="mode-focus">
+                    <span class="mode-num">25</span>
+                    <span class="mode-label">Focus</span>
                 </button>
-                <button class="tab" data-mode="short-break" id="tab-short-break">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
-                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
-                    </svg>
-                    Short Break
+                <button class="mode-btn" data-mode="short-break" id="mode-short">
+                    <span class="mode-num">05</span>
+                    <span class="mode-label">Break</span>
                 </button>
-                <button class="tab" data-mode="long-break" id="tab-long-break">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                        <circle cx="9" cy="7" r="4"/>
-                    </svg>
-                    Long Break
+                <button class="mode-btn" data-mode="long-break" id="mode-long">
+                    <span class="mode-num">15</span>
+                    <span class="mode-label">Long</span>
                 </button>
             </div>
 
-            <!-- Timer Ring -->
-            <div class="timer-container" id="timer-container">
-                <svg class="timer-ring" viewBox="0 0 260 260" id="timer-ring">
-                    <circle class="ring-bg" cx="130" cy="130" r="120" />
-                    <circle class="ring-progress" cx="130" cy="130" r="120" id="ring-progress"
-                        stroke-dasharray="753.98"
-                        stroke-dashoffset="0" />
+            <div class="timer-display" id="timer-display">
+                <svg class="timer-ring" viewBox="0 0 300 300" id="timer-ring">
+                    <circle class="ring-bg" cx="150" cy="150" r="140" />
+                    <circle class="ring-progress" cx="150" cy="150" r="140" id="ring-progress" />
                 </svg>
-                <div class="timer-display">
-                    <span class="timer-time" id="timer-time">25:00</span>
-                    <span class="timer-status" id="timer-status">Ready to focus</span>
+                <div class="timer-inner">
+                    <div class="timer-time" id="timer-time">25:00</div>
+                    <div class="timer-status" id="timer-status">Ready</div>
                 </div>
             </div>
 
-            <!-- Controls -->
-            <div class="controls" id="controls">
-                <button class="btn btn-secondary" id="btn-reset" aria-label="Reset timer" title="Reset">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
-                        <polyline points="1 4 1 10 7 10"/>
-                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
-                    </svg>
+            <div class="timer-controls">
+                <button class="ctrl-btn ctrl-secondary" id="btn-reset" title="Reset (R)">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 105.64-12.36L1 10"/></svg>
                 </button>
-                <button class="btn btn-primary" id="btn-start" aria-label="Start timer">
-                    <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" width="28" height="28" id="icon-play">
-                        <polygon points="6,3 20,12 6,21"/>
-                    </svg>
-                    <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" width="28" height="28" id="icon-pause" style="display:none;">
-                        <rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/>
-                    </svg>
+                <button class="ctrl-btn ctrl-primary" id="btn-start" title="Start/Pause (Space)">
+                    <svg class="icon-play" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    <svg class="icon-pause" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
                 </button>
-                <button class="btn btn-secondary" id="btn-skip" aria-label="Skip to next" title="Skip">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
-                        <polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/>
-                    </svg>
+                <button class="ctrl-btn ctrl-secondary" id="btn-skip" title="Skip (S)">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
                 </button>
             </div>
+        </section>
 
-            <!-- Task Input -->
-            <div class="task-section" id="task-section">
-                <input type="text" class="task-input" id="task-input" placeholder="What are you working on?" maxlength="80">
-            </div>
-
-            <!-- Daily Progress -->
-            <div class="progress-section" id="progress-section">
-                <div class="progress-header">
-                    <span class="progress-title">Today's Progress</span>
-                    <span class="progress-detail" id="progress-detail">0 / 8 sessions</span>
+        <!-- Right: Info -->
+        <section class="info-section">
+            <div class="info-block">
+                <h2 class="info-title">Today's<br><em>Progress</em></h2>
+                <div class="progress-grid" id="progress-grid">
+                    <div class="progress-dot" data-index="0"></div>
+                    <div class="progress-dot" data-index="1"></div>
+                    <div class="progress-dot" data-index="2"></div>
+                    <div class="progress-dot" data-index="3"></div>
+                    <div class="progress-dot" data-index="4"></div>
+                    <div class="progress-dot" data-index="5"></div>
+                    <div class="progress-dot" data-index="6"></div>
+                    <div class="progress-dot" data-index="7"></div>
                 </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progress-fill" style="width: 0%;"></div>
-                </div>
-                <div class="progress-dots" id="progress-dots">
-                    <span class="dot" data-index="0"></span>
-                    <span class="dot" data-index="1"></span>
-                    <span class="dot" data-index="2"></span>
-                    <span class="dot" data-index="3"></span>
-                    <span class="dot" data-index="4"></span>
-                    <span class="dot" data-index="5"></span>
-                    <span class="dot" data-index="6"></span>
-                    <span class="dot" data-index="7"></span>
+                <div class="progress-count">
+                    <span id="session-count">0</span>
+                    <span class="progress-label">/ 8 sessions</span>
                 </div>
             </div>
-        </main>
 
-        <!-- Footer -->
-        <footer class="footer">
-            <p>Built for the GDG Codelab · Pomodoro Technique&trade;</p>
-        </footer>
-    </div>
+            <div class="info-block">
+                <div class="task-label">Current Task</div>
+                <input type="text" id="task-input" class="task-input" placeholder="What are you working on?" maxlength="60">
+            </div>
+
+            <div class="info-block shortcuts-block">
+                <div class="shortcut-title">Shortcuts</div>
+                <div class="shortcut-row"><kbd>Space</kbd><span>Start / Pause</span></div>
+                <div class="shortcut-row"><kbd>R</kbd><span>Reset timer</span></div>
+                <div class="shortcut-row"><kbd>S</kbd><span>Skip to next</span></div>
+            </div>
+        </section>
+    </main>
 
     <script src="app.js"></script>
 </body>

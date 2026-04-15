@@ -1,18 +1,16 @@
-// app.js — Pomodoro Flow Timer Logic
+// Pomodoro Flow — Timer Logic (Editorial Edition)
 
 (function () {
     'use strict';
 
-    // --- Configuration ---
     const MODES = {
-        'focus':       { minutes: 25, label: 'Focus Time',    status: 'Stay focused!' },
-        'short-break': { minutes: 5,  label: 'Short Break',   status: 'Take a breather' },
-        'long-break':  { minutes: 15, label: 'Long Break',    status: 'Relax and recharge' },
+        'focus':       { minutes: 25, label: 'Stay focused',    breakAfter: 'short-break' },
+        'short-break': { minutes: 5,  label: 'Take a break',    breakAfter: 'focus' },
+        'long-break':  { minutes: 15, label: 'Relax & recharge', breakAfter: 'focus' }
     };
 
-    const CIRCUMFERENCE = 2 * Math.PI * 120; // r=120 from SVG
+    const CIRCUMFERENCE = 2 * Math.PI * 140; // r=140 from SVG
 
-    // --- State ---
     let currentMode = 'focus';
     let totalSeconds = MODES[currentMode].minutes * 60;
     let remainingSeconds = totalSeconds;
@@ -20,199 +18,154 @@
     let isRunning = false;
     let sessionsCompleted = 0;
 
-    // --- DOM Elements ---
-    const timerTimeEl = document.getElementById('timer-time');
-    const timerStatusEl = document.getElementById('timer-status');
+    // DOM refs
+    const timeDisplay = document.getElementById('timer-time');
+    const statusDisplay = document.getElementById('timer-status');
     const ringProgress = document.getElementById('ring-progress');
     const btnStart = document.getElementById('btn-start');
     const btnReset = document.getElementById('btn-reset');
     const btnSkip = document.getElementById('btn-skip');
-    const iconPlay = document.getElementById('icon-play');
-    const iconPause = document.getElementById('icon-pause');
-    const tabButtons = document.querySelectorAll('.tab');
-    const sessionCountEl = document.getElementById('session-count');
-    const progressFill = document.getElementById('progress-fill');
-    const progressDetail = document.getElementById('progress-detail');
-    const progressDots = document.querySelectorAll('.dot');
+    const iconPlay = btnStart.querySelector('.icon-play');
+    const iconPause = btnStart.querySelector('.icon-pause');
+    const modeBtns = document.querySelectorAll('.mode-btn');
+    const sessionCount = document.getElementById('session-count');
+    const progressDots = document.querySelectorAll('.progress-dot');
 
-    // --- Formatting ---
-    function formatTime(seconds) {
-        const m = Math.floor(seconds / 60);
-        const s = seconds % 60;
-        return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-    }
-
-    // --- Ring Progress ---
-    function updateRing() {
-        const fraction = remainingSeconds / totalSeconds;
-        const offset = CIRCUMFERENCE * fraction;
-        ringProgress.setAttribute('stroke-dashoffset', String(CIRCUMFERENCE - offset));
-    }
-
-    // --- Display Update ---
-    function updateDisplay() {
-        timerTimeEl.textContent = formatTime(remainingSeconds);
-        updateRing();
-    }
-
-    // --- Mode Switch ---
-    function setMode(mode) {
-        currentMode = mode;
-        const config = MODES[mode];
-        totalSeconds = config.minutes * 60;
-        remainingSeconds = totalSeconds;
-        isRunning = false;
-        clearInterval(timerInterval);
-        timerInterval = null;
-
-        // Update UI
-        timerStatusEl.textContent = `Ready to ${mode === 'focus' ? 'focus' : 'rest'}`;
-        document.body.className = `mode-${mode}`;
-        iconPlay.style.display = '';
-        iconPause.style.display = 'none';
-        document.body.classList.remove('timer-running');
-
-        tabButtons.forEach(tab => {
-            tab.classList.toggle('active', tab.dataset.mode === mode);
-        });
-
-        updateDisplay();
-    }
-
-    // --- Timer Tick ---
-    function tick() {
-        if (remainingSeconds <= 0) {
-            clearInterval(timerInterval);
-            timerInterval = null;
-            isRunning = false;
-            iconPlay.style.display = '';
-            iconPause.style.display = 'none';
-            document.body.classList.remove('timer-running');
-
-            onTimerComplete();
-            return;
-        }
-        remainingSeconds--;
-        updateDisplay();
-    }
-
-    // --- Timer Complete ---
-    function onTimerComplete() {
-        // Play a gentle notification sound
-        playNotification();
-
-        if (currentMode === 'focus') {
-            sessionsCompleted++;
-            sessionCountEl.textContent = sessionsCompleted;
-            updateProgress();
-
-            timerStatusEl.textContent = 'Session complete! 🎉';
-
-            // Auto-switch to break
-            setTimeout(() => {
-                if (sessionsCompleted % 4 === 0) {
-                    setMode('long-break');
-                } else {
-                    setMode('short-break');
-                }
-            }, 2000);
-        } else {
-            timerStatusEl.textContent = 'Break over! Ready?';
-            setTimeout(() => setMode('focus'), 2000);
-        }
-    }
-
-    // --- Play notification ---
-    function playNotification() {
+    // Audio chime
+    function playChime() {
         try {
             const ctx = new (window.AudioContext || window.webkitAudioContext)();
-            const notes = [523.25, 659.25, 783.99]; // C5, E5, G5 chord
-
-            notes.forEach((freq, i) => {
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.value = freq;
-                gain.gain.setValueAtTime(0.15, ctx.currentTime + i * 0.15);
-                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.15 + 1);
-                osc.connect(gain).connect(ctx.destination);
-                osc.start(ctx.currentTime + i * 0.15);
-                osc.stop(ctx.currentTime + i * 0.15 + 1);
-            });
-        } catch (e) {
-            // Audio not supported, skip
-        }
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+            gain.gain.setValueAtTime(0.3, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 1);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 1);
+            // Second tone
+            setTimeout(() => {
+                const osc2 = ctx.createOscillator();
+                const gain2 = ctx.createGain();
+                osc2.connect(gain2);
+                gain2.connect(ctx.destination);
+                osc2.type = 'sine';
+                osc2.frequency.setValueAtTime(783.99, ctx.currentTime);
+                gain2.gain.setValueAtTime(0.3, ctx.currentTime);
+                gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 1.2);
+                osc2.start(ctx.currentTime);
+                osc2.stop(ctx.currentTime + 1.2);
+            }, 200);
+        } catch (e) { /* Audio not available */ }
     }
 
-    // --- Progress Update ---
-    function updateProgress() {
-        const goal = 8;
-        const pct = Math.min((sessionsCompleted / goal) * 100, 100);
-        progressFill.style.width = pct + '%';
-        progressDetail.textContent = `${sessionsCompleted} / ${goal} sessions`;
-
-        progressDots.forEach((dot, idx) => {
-            dot.classList.toggle('filled', idx < sessionsCompleted);
-        });
+    function formatTime(seconds) {
+        const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+        const s = (seconds % 60).toString().padStart(2, '0');
+        return `${m}:${s}`;
     }
 
-    // --- Event Listeners ---
+    function updateDisplay() {
+        timeDisplay.textContent = formatTime(remainingSeconds);
+        const progress = 1 - (remainingSeconds / totalSeconds);
+        ringProgress.style.strokeDashoffset = CIRCUMFERENCE * (1 - progress);
+    }
 
-    // Start / Pause
-    btnStart.addEventListener('click', () => {
-        if (isRunning) {
-            // Pause
-            clearInterval(timerInterval);
-            timerInterval = null;
-            isRunning = false;
-            iconPlay.style.display = '';
-            iconPause.style.display = 'none';
-            timerStatusEl.textContent = 'Paused';
-            document.body.classList.remove('timer-running');
+    function setMode(mode) {
+        if (isRunning) stopTimer();
+        currentMode = mode;
+        totalSeconds = MODES[mode].minutes * 60;
+        remainingSeconds = totalSeconds;
+        statusDisplay.textContent = 'Ready';
+
+        modeBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.mode === mode));
+        document.body.classList.toggle('on-break', mode !== 'focus');
+
+        ringProgress.style.strokeDasharray = CIRCUMFERENCE;
+        ringProgress.style.strokeDashoffset = 0;
+        updateDisplay();
+    }
+
+    function startTimer() {
+        isRunning = true;
+        document.body.classList.add('running');
+        statusDisplay.textContent = MODES[currentMode].label;
+        iconPlay.style.display = 'none';
+        iconPause.style.display = 'block';
+
+        timerInterval = setInterval(() => {
+            remainingSeconds--;
+            updateDisplay();
+            if (remainingSeconds <= 0) {
+                stopTimer();
+                playChime();
+                onTimerComplete();
+            }
+        }, 1000);
+    }
+
+    function stopTimer() {
+        isRunning = false;
+        document.body.classList.remove('running');
+        clearInterval(timerInterval);
+        timerInterval = null;
+        iconPlay.style.display = 'block';
+        iconPause.style.display = 'none';
+        if (remainingSeconds > 0) statusDisplay.textContent = 'Paused';
+    }
+
+    function resetTimer() {
+        stopTimer();
+        remainingSeconds = totalSeconds;
+        statusDisplay.textContent = 'Ready';
+        updateDisplay();
+    }
+
+    function onTimerComplete() {
+        if (currentMode === 'focus') {
+            sessionsCompleted++;
+            sessionCount.textContent = sessionsCompleted;
+            if (sessionsCompleted <= 8) {
+                progressDots[sessionsCompleted - 1].classList.add('filled');
+            }
+            // Long break every 4
+            const nextMode = sessionsCompleted % 4 === 0 ? 'long-break' : 'short-break';
+            statusDisplay.textContent = 'Session complete!';
+            setTimeout(() => setMode(nextMode), 1500);
         } else {
-            // Start
-            isRunning = true;
-            iconPlay.style.display = 'none';
-            iconPause.style.display = '';
-            timerStatusEl.textContent = MODES[currentMode].status;
-            document.body.classList.add('timer-running');
-            timerInterval = setInterval(tick, 1000);
+            statusDisplay.textContent = 'Break over!';
+            setTimeout(() => setMode('focus'), 1500);
         }
-    });
+    }
 
-    // Reset
-    btnReset.addEventListener('click', () => {
-        setMode(currentMode);
-    });
-
-    // Skip
+    // Event listeners
+    btnStart.addEventListener('click', () => isRunning ? stopTimer() : startTimer());
+    btnReset.addEventListener('click', resetTimer);
     btnSkip.addEventListener('click', () => {
         if (currentMode === 'focus') {
-            setMode('short-break');
+            const nextMode = sessionsCompleted % 4 === 0 && sessionsCompleted > 0 ? 'long-break' : 'short-break';
+            setMode(nextMode);
         } else {
             setMode('focus');
         }
     });
 
-    // Mode tabs
-    tabButtons.forEach(tab => {
-        tab.addEventListener('click', () => {
-            setMode(tab.dataset.mode);
-        });
+    modeBtns.forEach(btn => {
+        btn.addEventListener('click', () => setMode(btn.dataset.mode));
     });
 
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
         if (e.target.tagName === 'INPUT') return;
-        if (e.key === ' ' || e.key === 'Enter') {
-            e.preventDefault();
-            btnStart.click();
-        }
-        if (e.key === 'r' || e.key === 'R') btnReset.click();
+        if (e.code === 'Space') { e.preventDefault(); isRunning ? stopTimer() : startTimer(); }
+        if (e.key === 'r' || e.key === 'R') resetTimer();
         if (e.key === 's' || e.key === 'S') btnSkip.click();
     });
 
-    // --- Initialize ---
-    setMode('focus');
-
+    // Initialize
+    ringProgress.style.strokeDasharray = CIRCUMFERENCE;
+    ringProgress.style.strokeDashoffset = 0;
+    updateDisplay();
 })();
