@@ -19,6 +19,21 @@
         }).filter(r => r.width > 0 && r.height > 0);
     }
 
+    // 2. Random Matte Black Grid Blocks (Brutalist aesthetic)
+    function applyRandomMatteBlocks() {
+        const blocks = Array.from(document.querySelectorAll('.step-card, .result-card, .prompt-card, .speaker-card .card-inner, .info-block'));
+        if (blocks.length === 0) return;
+        
+        // Target roughly 20-30% of blocks
+        const targetCount = Math.max(1, Math.floor(blocks.length * 0.25));
+        
+        // Shuffle array and pick first N
+        const shuffled = blocks.sort(() => 0.5 - Math.random());
+        for(let i = 0; i < targetCount; i++) {
+            shuffled[i].classList.add('matte-black-block');
+        }
+    }
+
     function initCanvas() {
         width = canvas.width = window.innerWidth;
         height = canvas.height = window.innerHeight;
@@ -129,6 +144,7 @@
 
     // Give the DOM a tiny bit of time to settle layout before init
     setTimeout(() => {
+        applyRandomMatteBlocks();
         initCanvas();
         drawParticles();
     }, 100);
