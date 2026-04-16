@@ -7,7 +7,7 @@
     <title>Google Cloud Summit 2026</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../particles.css">
     <style>
         :root {
@@ -300,7 +300,92 @@
             .footer-left { border-right: none; border-bottom: 1px solid var(--border); }
             .footer-right { justify-content: flex-start; }
         }
-    </style>
+
+        /* ── SETTINGS FAB (Google I/O Style) ── */
+        .settings-fab {
+            position: fixed; bottom: 30px; right: 30px; z-index: 999;
+            background: rgba(40,40,40,0.8); backdrop-filter: blur(20px);
+            border: 1px solid var(--border); border-radius: 30px; 
+            display: flex; flex-direction: column; align-items: flex-start;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6); 
+            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            overflow: hidden; width: 48px; height: 48px;
+        }
+        .settings-fab.open { width: 280px; height: 160px; border-radius: 20px; }
+        
+        .settings-header {
+            width: 100%; display: flex; align-items: center; justify-content: center;
+            height: 48px; cursor: pointer; flex-shrink: 0;
+        }
+        .settings-fab.open .settings-header { justify-content: flex-end; padding-right: 14px; }
+        
+        .settings-icon { 
+            width: 22px; height: 22px; color: var(--white); 
+            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .settings-fab.open .settings-icon { transform: rotate(180deg); }
+        
+        .settings-content { 
+            opacity: 0; pointer-events: none; transition: opacity 0.3s; 
+            padding: 0 24px 24px; width: 100%; display: flex; flex-direction: column; gap: 18px; 
+            transform: translateY(10px); transition: all 0.4s ease;
+        }
+        .settings-fab.open .settings-content { opacity: 1; pointer-events: auto; transform: translateY(0); transition-delay: 0.1s; }
+        
+        .settings-row { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+        .settings-label { font-family: var(--mono); font-size: 0.75rem; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; }
+        
+        .color-picker { display: flex; gap: 10px; }
+        .color-btn { 
+            width: 20px; height: 20px; border-radius: 50%; border: 2px solid transparent; 
+            cursor: pointer; transition: transform 0.2s, border-color 0.2s; 
+        }
+        .color-btn:hover { transform: scale(1.2); }
+        .color-btn.active { border-color: var(--white); transform: scale(1.1); }
+        
+        .lang-picker { display: flex; background: rgba(0,0,0,0.3); border-radius: 20px; padding: 4px; }
+        .lang-btn { 
+            background: none; border: none; color: #888; padding: 4px 16px; 
+            border-radius: 16px; font-size: 0.75rem; font-family: var(--mono); font-weight: 600;
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        .lang-btn.active { background: var(--accent); color: var(--bg); }
+    
+        /* ── CALENDAR VIEW & IO ANIMATIONS ── */
+        .section-header { position: relative; display: flex; align-items: center; }
+        .view-toggles { display: flex; gap: 8px; margin-left: auto; margin-right: 20px; }
+        .view-btn { background: none; border: 1px solid var(--border); color: var(--gray); padding: 8px; cursor: pointer; border-radius: 8px; transition: 0.3s; }
+        .view-btn.active { color: var(--accent); border-color: var(--accent); background: var(--surface); }
+        .view-btn:hover { color: var(--white); border-color: var(--white); transform: translateY(-2px); }
+        
+        .timeline.calendar-mode { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; padding: 24px 48px; background: var(--bg); border: none; }
+        @media (max-width: 768px) { .timeline.calendar-mode { padding: 20px; grid-template-columns: 1fr; } }
+        
+        .timeline.calendar-mode .talk-card { display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+        .timeline.calendar-mode .talk-card::after { width: 100%; height: 3px; transform: scaleX(0); transform-origin: left; top: 0; bottom: auto; }
+        .timeline.calendar-mode .talk-card:hover::after { transform: scaleX(1); }
+        .timeline.calendar-mode .talk-time-col { border-right: none; border-bottom: 1px solid var(--border); padding: 16px; flex-direction: row; justify-content: space-between; align-items: center; }
+        .timeline.calendar-mode .talk-content { padding: 24px; flex: 1; display: flex; flex-direction: column; }
+        .timeline.calendar-mode .talk-duration { margin-top: 0; }
+        .timeline.calendar-mode .talk-speakers { margin-top: auto; padding-top: 20px; }
+
+        .talk-actions { margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap; }
+        .action-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; font-family: var(--mono); color: var(--white); border: 1px solid var(--border); background: var(--surface); padding: 6px 12px; border-radius: 20px; transition: 0.3s; cursor: pointer; text-decoration: none; }
+        .action-btn:hover { background: var(--accent); border-color: var(--accent); color: var(--bg); transform: translateY(-2px); }
+        
+        .more-info-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; font-size: 0.85rem; color: var(--gray); }
+        .more-info-content.expanded { max-height: 400px; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--border); }
+        
+        /* I/O 2026 Like Interactions */
+        .hero-title { transform-style: preserve-3d; perspective: 1000px; }
+        .hero-title em { display: inline-block; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .hero-title:hover em { transform: rotateY(15deg) scale(1.05); text-shadow: 0 10px 30px rgba(155,109,255,0.6); }
+        .pill, .speaker-chip, .hero-cta { transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s, color 0.3s; }
+        .pill:hover, .speaker-chip:hover { transform: translateY(-4px) scale(1.02); }
+        
+        .nav { transition: background 0.5s ease, backdrop-filter 0.5s ease; }
+        .nav:hover { background: rgba(17,17,17,0.98); backdrop-filter: blur(24px); }
+</style>
 </head>
 <body>
     <!-- NAV -->
@@ -310,9 +395,9 @@
             <span class="nav-dot"></span>
         </div>
         <ul class="nav-links">
-            <li><a href="#schedule">Schedule</a></li>
-            <li><a href="#speakers">Speakers</a></li>
-            <li><a href="../">← Back</a></li>
+            <li><a href="#schedule" data-i18n="schedule">Schedule</a></li>
+            <li><a href="#speakers" data-i18n="speakersTitle">Speakers</a></li>
+            <li><a href="../" data-i18n="backBtn">← Back</a></li>
         </ul>
         <span class="nav-tag">Exercise 02</span>
         <button class="nav-menu-btn" onclick="document.querySelector('.nav-links').style.display=document.querySelector('.nav-links').style.display==='flex'?'none':'flex'" aria-label="Menu">
@@ -323,9 +408,9 @@
     <!-- HERO -->
     <header class="hero" id="hero">
         <div class="hero-left">
-            <div class="hero-badge">Google Cloud Technologies</div>
+            <div class="hero-badge" data-i18n="heroBadge">Google Cloud Technologies</div>
             <h1 class="hero-title">Google<br>Cloud<br><em>Summit</em></h1>
-            <p class="hero-tagline">A full day of cutting-edge talks on AI, cloud infrastructure, and next-generation developer tools from industry-leading experts.</p>
+            <p class="hero-tagline" data-i18n="heroTagline">A full day of cutting-edge talks on AI, cloud infrastructure, and next-generation developer tools from industry-leading experts.</p>
             <div class="hero-meta">
                 <div class="meta-item">
                     <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -348,11 +433,11 @@
             </div>
             <div class="hero-cta-row">
                 <a href="#schedule" class="hero-cta">
-                    View Schedule
+                    <span data-i18n="viewSchedule">View Schedule</span>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
                 </a>
                 <a href="#speakers" class="hero-cta">
-                    Speakers
+                    <span data-i18n="speakersBtn">Speakers</span>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/></svg>
                 </a>
             </div>
@@ -363,72 +448,140 @@
     <section class="search-section" id="search-section">
         <div class="search-wrap">
             <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" id="search-input" class="search-input" placeholder="Search talks, speakers..." autocomplete="off">
+            <input type="text" id="search-input" class="search-input" placeholder="Search talks, speakers..." data-i18n="searchPlaceholder" autocomplete="off">
             <button class="search-clear" id="search-clear" aria-label="Clear">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
         </div>
         <div class="filter-pills" id="filter-pills">
-            <button class="pill active" data-category="">All</button>
-            <button class="pill" data-category="AI & Machine Learning">AI & ML</button>
-            <button class="pill" data-category="Cloud Infrastructure">Infrastructure</button>
+            <button class="pill active" data-category="" data-i18n="all">All</button>
+            <button class="pill" data-category="AI & Machine Learning" data-i18n="ai">AI & ML</button>
+            <button class="pill" data-category="Cloud Infrastructure" data-i18n="infra">Infrastructure</button>
         </div>
     </section>
 
     <!-- SCHEDULE -->
     <section class="schedule" id="schedule">
         <div class="section-header reveal">
-            <h2 class="section-title">Schedule</h2>
+            <h2 class="section-title" data-i18n="schedule">Schedule</h2>
             <span class="section-count">// 08 talks + lunch</span>
+            <div class="view-toggles">
+                <button class="view-btn active" id="btn-view-cards" data-i18n="viewCards" aria-label="Card View">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="12" x2="21" y2="12"></line></svg>
+                </button>
+                <button class="view-btn" id="btn-view-calendar" data-i18n="viewCalendar" aria-label="Calendar View">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                </button>
+            </div>
         </div>
         <div class="timeline" id="timeline">
             <!-- T001 -->
-            <div class="talk-card reveal" data-talk-id="T001" data-categories="ai & machine learning" data-title="keynote: the future of ai on google cloud" data-speakers="maria chen james rodriguez" id="talk-T001">
+            <div class="talk-card reveal" data-talk-id="T001" data-categories="ai & machine learning" data-title="keynote: the future of ai on google cloud" data-speakers="julio velázquez debi cabrera" id="talk-T001">
                 <div class="talk-time-col"><span class="talk-time">09:00</span><span class="talk-duration">45 min</span></div>
                 <div class="talk-content">
                     <div class="talk-header"><div class="talk-categories"><span class="cat-tag cat-ai">AI & ML</span></div><span class="talk-id">T001</span></div>
                     <h3 class="talk-title">Keynote: The Future of AI on Google Cloud</h3>
                     <p class="talk-desc">Discover how Google Cloud is pushing the boundaries of AI with Gemini, Vertex AI, and next-generation foundation models.</p>
+                    
+                    <div class="talk-actions">
+                        <a href="#" class="action-btn gcal-btn" target="_blank">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                            <span data-i18n="addToCal">Add to Calendar</span>
+                        </a>
+                        <button class="action-btn more-info-btn">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            <span data-i18n="moreInfo">More Info</span>
+                        </button>
+                    </div>
+                    <div class="more-info-content">
+                        <p style="margin-bottom:8px"><strong>Location:</strong> Stage Alpha</p>
+                        <p>Detailed insights into the technical implementations, architecture decisions, and best practices directly from Google Cloud experts.</p>
+                    </div>
                     <div class="talk-speakers">
-                        <a href="https://linkedin.com/in/mariachen" target="_blank" class="speaker-chip"><div class="speaker-avatar">MC</div><div><div class="speaker-name">Maria Chen</div><div class="speaker-link-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> in</div></div></a>
-                        <a href="https://linkedin.com/in/jamesrodriguez" target="_blank" class="speaker-chip"><div class="speaker-avatar">JR</div><div><div class="speaker-name">James Rodriguez</div><div class="speaker-link-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> in</div></div></a>
+                        <a href="https://linkedin.com/in/juliovelazquez" target="_blank" class="speaker-chip"><div class="speaker-avatar">JV</div><div><div class="speaker-name">Julio Velázquez</div><div class="speaker-link-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> in</div></div></a>
+                        <a href="https://linkedin.com/in/debicabrera" target="_blank" class="speaker-chip"><div class="speaker-avatar">DC</div><div><div class="speaker-name">Debi Cabrera</div><div class="speaker-link-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> in</div></div></a>
                     </div>
                 </div>
             </div>
             <!-- T002 -->
-            <div class="talk-card reveal" data-talk-id="T002" data-categories="ai & machine learning" data-title="building intelligent apps with gemini api" data-speakers="aisha patel" id="talk-T002">
+            <div class="talk-card reveal" data-talk-id="T002" data-categories="ai & machine learning" data-title="building intelligent apps with gemini api" data-speakers="lucia subatin" id="talk-T002">
                 <div class="talk-time-col"><span class="talk-time">09:50</span><span class="talk-duration">45 min</span></div>
                 <div class="talk-content">
                     <div class="talk-header"><div class="talk-categories"><span class="cat-tag cat-ai">AI & ML</span></div><span class="talk-id">T002</span></div>
-                    <h3 class="talk-title">Building Intelligent Apps with Gemini API</h3>
-                    <p class="talk-desc">A hands-on deep dive into the Gemini API — text generation, image understanding, and code assistance.</p>
+                    <h3 class="talk-title">Building Intelligent Apps with Gemini LSI</h3>
+                    <p class="talk-desc">A hands-on deep dive into the Gemini LSI — text generation, image understanding, and code assistance.</p>
+                    
+                    <div class="talk-actions">
+                        <a href="#" class="action-btn gcal-btn" target="_blank">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                            <span data-i18n="addToCal">Add to Calendar</span>
+                        </a>
+                        <button class="action-btn more-info-btn">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            <span data-i18n="moreInfo">More Info</span>
+                        </button>
+                    </div>
+                    <div class="more-info-content">
+                        <p style="margin-bottom:8px"><strong>Location:</strong> Stage Alpha</p>
+                        <p>Detailed insights into the technical implementations, architecture decisions, and best practices directly from Google Cloud experts.</p>
+                    </div>
                     <div class="talk-speakers">
-                        <a href="https://linkedin.com/in/aishapatel" target="_blank" class="speaker-chip"><div class="speaker-avatar">AP</div><div><div class="speaker-name">Aisha Patel</div><div class="speaker-link-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> in</div></div></a>
+                        <a href="https://linkedin.com/in/luciasubatin" target="_blank" class="speaker-chip"><div class="speaker-avatar">LS</div><div><div class="speaker-name">Lucia Subatin</div><div class="speaker-link-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> in</div></div></a>
                     </div>
                 </div>
             </div>
             <!-- T003 -->
-            <div class="talk-card reveal" data-talk-id="T003" data-categories="cloud infrastructure" data-title="serverless at scale with cloud run & cloud functions" data-speakers="david kim sophie müller" id="talk-T003">
+            <div class="talk-card reveal" data-talk-id="T003" data-categories="cloud infrastructure" data-title="serverless at scale with cloud run & cloud functions" data-speakers="mariano colin victor gude" id="talk-T003">
                 <div class="talk-time-col"><span class="talk-time">10:40</span><span class="talk-duration">45 min</span></div>
                 <div class="talk-content">
                     <div class="talk-header"><div class="talk-categories"><span class="cat-tag cat-infra">Infrastructure</span></div><span class="talk-id">T003</span></div>
                     <h3 class="talk-title">Serverless at Scale with Cloud Run & Cloud Functions</h3>
                     <p class="talk-desc">Build and deploy scalable serverless apps — autoscaling, cold start optimization, and cost management.</p>
+                    
+                    <div class="talk-actions">
+                        <a href="#" class="action-btn gcal-btn" target="_blank">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                            <span data-i18n="addToCal">Add to Calendar</span>
+                        </a>
+                        <button class="action-btn more-info-btn">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            <span data-i18n="moreInfo">More Info</span>
+                        </button>
+                    </div>
+                    <div class="more-info-content">
+                        <p style="margin-bottom:8px"><strong>Location:</strong> Stage Alpha</p>
+                        <p>Detailed insights into the technical implementations, architecture decisions, and best practices directly from Google Cloud experts.</p>
+                    </div>
                     <div class="talk-speakers">
-                        <a href="https://linkedin.com/in/davidkim" target="_blank" class="speaker-chip"><div class="speaker-avatar">DK</div><div><div class="speaker-name">David Kim</div><div class="speaker-link-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> in</div></div></a>
-                        <a href="https://linkedin.com/in/sophiemuller" target="_blank" class="speaker-chip"><div class="speaker-avatar">SM</div><div><div class="speaker-name">Sophie Müller</div><div class="speaker-link-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> in</div></div></a>
+                        <a href="https://linkedin.com/in/marianocolin" target="_blank" class="speaker-chip"><div class="speaker-avatar">MC</div><div><div class="speaker-name">Mariano Colin</div><div class="speaker-link-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> in</div></div></a>
+                        <a href="https://linkedin.com/in/victorgude" target="_blank" class="speaker-chip"><div class="speaker-avatar">VG</div><div><div class="speaker-name">Victor Gude</div><div class="speaker-link-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> in</div></div></a>
                     </div>
                 </div>
             </div>
             <!-- T004 -->
-            <div class="talk-card reveal" data-talk-id="T004" data-categories="ai & machine learning,cloud infrastructure" data-title="real-time analytics with bigquery & looker" data-speakers="carlos oliveira" id="talk-T004">
+            <div class="talk-card reveal" data-talk-id="T004" data-categories="ai & machine learning,cloud infrastructure" data-title="real-time analytics with bigquery & looker" data-speakers="miguel reyes" id="talk-T004">
                 <div class="talk-time-col"><span class="talk-time">11:30</span><span class="talk-duration">45 min</span></div>
                 <div class="talk-content">
                     <div class="talk-header"><div class="talk-categories"><span class="cat-tag cat-ai">AI & ML</span><span class="cat-tag cat-infra">Infrastructure</span></div><span class="talk-id">T004</span></div>
                     <h3 class="talk-title">Real-Time Analytics with BigQuery & Looker</h3>
                     <p class="talk-desc">Unlock data insights with BigQuery's serverless architecture and Looker's visualization — streaming ingestion to real-time dashboards.</p>
+                    
+                    <div class="talk-actions">
+                        <a href="#" class="action-btn gcal-btn" target="_blank">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                            <span data-i18n="addToCal">Add to Calendar</span>
+                        </a>
+                        <button class="action-btn more-info-btn">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            <span data-i18n="moreInfo">More Info</span>
+                        </button>
+                    </div>
+                    <div class="more-info-content">
+                        <p style="margin-bottom:8px"><strong>Location:</strong> Stage Alpha</p>
+                        <p>Detailed insights into the technical implementations, architecture decisions, and best practices directly from Google Cloud experts.</p>
+                    </div>
                     <div class="talk-speakers">
-                        <a href="https://linkedin.com/in/carlosoliveira" target="_blank" class="speaker-chip"><div class="speaker-avatar">CO</div><div><div class="speaker-name">Carlos Oliveira</div><div class="speaker-link-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> in</div></div></a>
+                        <a href="https://linkedin.com/in/miguelreyes" target="_blank" class="speaker-chip"><div class="speaker-avatar">MR</div><div><div class="speaker-name">Miguel Reyes</div><div class="speaker-link-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> in</div></div></a>
                     </div>
                 </div>
             </div>
@@ -443,52 +596,112 @@
                 </div>
             </div>
             <!-- T005 -->
-            <div class="talk-card reveal" data-talk-id="T005" data-categories="cloud infrastructure" data-title="kubernetes mastery: gke autopilot in production" data-speakers="priya sharma liam o'brien" id="talk-T005">
+            <div class="talk-card reveal" data-talk-id="T005" data-categories="cloud infrastructure" data-title="kubernetes mastery: gke autopilot in production" data-speakers="siahara alvarez melina lópez" id="talk-T005">
                 <div class="talk-time-col"><span class="talk-time">13:15</span><span class="talk-duration">45 min</span></div>
                 <div class="talk-content">
                     <div class="talk-header"><div class="talk-categories"><span class="cat-tag cat-infra">Infrastructure</span></div><span class="talk-id">T005</span></div>
                     <h3 class="talk-title">Kubernetes Mastery: GKE Autopilot in Production</h3>
                     <p class="talk-desc">Run production workloads with minimal overhead — security best practices and cost optimization.</p>
+                    
+                    <div class="talk-actions">
+                        <a href="#" class="action-btn gcal-btn" target="_blank">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                            <span data-i18n="addToCal">Add to Calendar</span>
+                        </a>
+                        <button class="action-btn more-info-btn">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            <span data-i18n="moreInfo">More Info</span>
+                        </button>
+                    </div>
+                    <div class="more-info-content">
+                        <p style="margin-bottom:8px"><strong>Location:</strong> Stage Alpha</p>
+                        <p>Detailed insights into the technical implementations, architecture decisions, and best practices directly from Google Cloud experts.</p>
+                    </div>
                     <div class="talk-speakers">
-                        <a href="https://linkedin.com/in/priyasharma" target="_blank" class="speaker-chip"><div class="speaker-avatar">PS</div><div><div class="speaker-name">Priya Sharma</div><div class="speaker-link-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> in</div></div></a>
-                        <a href="https://linkedin.com/in/liamobrien" target="_blank" class="speaker-chip"><div class="speaker-avatar">LO</div><div><div class="speaker-name">Liam O'Brien</div><div class="speaker-link-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> in</div></div></a>
+                        <a href="https://linkedin.com/in/siaharaalvarez" target="_blank" class="speaker-chip"><div class="speaker-avatar">SA</div><div><div class="speaker-name">Siahara Alvarez</div><div class="speaker-link-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> in</div></div></a>
+                        <a href="https://linkedin.com/in/melinalopez" target="_blank" class="speaker-chip"><div class="speaker-avatar">ML</div><div><div class="speaker-name">Melina López</div><div class="speaker-link-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> in</div></div></a>
                     </div>
                 </div>
             </div>
             <!-- T006 -->
-            <div class="talk-card reveal" data-talk-id="T006" data-categories="cloud infrastructure" data-title="building with firestore: nosql for modern apps" data-speakers="yuki tanaka" id="talk-T006">
+            <div class="talk-card reveal" data-talk-id="T006" data-categories="cloud infrastructure" data-title="building with firestore: nosql for modern apps" data-speakers="fede rosenhain" id="talk-T006">
                 <div class="talk-time-col"><span class="talk-time">14:05</span><span class="talk-duration">45 min</span></div>
                 <div class="talk-content">
                     <div class="talk-header"><div class="talk-categories"><span class="cat-tag cat-infra">Infrastructure</span></div><span class="talk-id">T006</span></div>
                     <h3 class="talk-title">Building with Firestore: NoSQL for Modern Apps</h3>
                     <p class="talk-desc">Data modeling, real-time listeners, security rules, and global scaling strategies.</p>
+                    
+                    <div class="talk-actions">
+                        <a href="#" class="action-btn gcal-btn" target="_blank">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                            <span data-i18n="addToCal">Add to Calendar</span>
+                        </a>
+                        <button class="action-btn more-info-btn">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            <span data-i18n="moreInfo">More Info</span>
+                        </button>
+                    </div>
+                    <div class="more-info-content">
+                        <p style="margin-bottom:8px"><strong>Location:</strong> Stage Alpha</p>
+                        <p>Detailed insights into the technical implementations, architecture decisions, and best practices directly from Google Cloud experts.</p>
+                    </div>
                     <div class="talk-speakers">
-                        <a href="https://linkedin.com/in/yukitanaka" target="_blank" class="speaker-chip"><div class="speaker-avatar">YT</div><div><div class="speaker-name">Yuki Tanaka</div><div class="speaker-link-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> in</div></div></a>
+                        <a href="https://linkedin.com/in/federosenhain" target="_blank" class="speaker-chip"><div class="speaker-avatar">FR</div><div><div class="speaker-name">Fede Rosenhain</div><div class="speaker-link-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> in</div></div></a>
                     </div>
                 </div>
             </div>
             <!-- T007 -->
-            <div class="talk-card reveal" data-talk-id="T007" data-categories="ai & machine learning" data-title="mlops on vertex ai: from prototype to production" data-speakers="elena vasquez omar hassan" id="talk-T007">
+            <div class="talk-card reveal" data-talk-id="T007" data-categories="ai & machine learning" data-title="mlops on vertex ai: from prototype to production" data-speakers="pablo pérez villanueva armando estrada" id="talk-T007">
                 <div class="talk-time-col"><span class="talk-time">14:55</span><span class="talk-duration">45 min</span></div>
                 <div class="talk-content">
                     <div class="talk-header"><div class="talk-categories"><span class="cat-tag cat-ai">AI & ML</span></div><span class="talk-id">T007</span></div>
-                    <h3 class="talk-title">MLOps on Vertex AI: From Prototype to Production</h3>
+                    <h3 class="talk-title">MMLps on Vertex AI: From Prototype to Production</h3>
                     <p class="talk-desc">Vertex AI Pipelines, Model Registry, and Feature Store for reproducible ML workflows.</p>
+                    
+                    <div class="talk-actions">
+                        <a href="#" class="action-btn gcal-btn" target="_blank">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                            <span data-i18n="addToCal">Add to Calendar</span>
+                        </a>
+                        <button class="action-btn more-info-btn">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            <span data-i18n="moreInfo">More Info</span>
+                        </button>
+                    </div>
+                    <div class="more-info-content">
+                        <p style="margin-bottom:8px"><strong>Location:</strong> Stage Alpha</p>
+                        <p>Detailed insights into the technical implementations, architecture decisions, and best practices directly from Google Cloud experts.</p>
+                    </div>
                     <div class="talk-speakers">
-                        <a href="https://linkedin.com/in/elenavasquez" target="_blank" class="speaker-chip"><div class="speaker-avatar">EV</div><div><div class="speaker-name">Elena Vasquez</div><div class="speaker-link-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> in</div></div></a>
-                        <a href="https://linkedin.com/in/omarhassan" target="_blank" class="speaker-chip"><div class="speaker-avatar">OH</div><div><div class="speaker-name">Omar Hassan</div><div class="speaker-link-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> in</div></div></a>
+                        <a href="https://linkedin.com/in/pabloperezvillanueva" target="_blank" class="speaker-chip"><div class="speaker-avatar">PV</div><div><div class="speaker-name">Pablo Pérez Villanueva</div><div class="speaker-link-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> in</div></div></a>
+                        <a href="https://linkedin.com/in/armandoestrada" target="_blank" class="speaker-chip"><div class="speaker-avatar">AE</div><div><div class="speaker-name">Armando Estrada</div><div class="speaker-link-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> in</div></div></a>
                     </div>
                 </div>
             </div>
             <!-- T008 -->
-            <div class="talk-card reveal" data-talk-id="T008" data-categories="cloud infrastructure" data-title="securing the cloud: zero trust with google cloud security" data-speakers="rebecca nguyen" id="talk-T008">
+            <div class="talk-card reveal" data-talk-id="T008" data-categories="cloud infrastructure" data-title="securing the cloud: zero trust with google cloud security" data-speakers="salvador vázquez" id="talk-T008">
                 <div class="talk-time-col"><span class="talk-time">15:45</span><span class="talk-duration">45 min</span></div>
                 <div class="talk-content">
                     <div class="talk-header"><div class="talk-categories"><span class="cat-tag cat-infra">Infrastructure</span></div><span class="talk-id">T008</span></div>
                     <h3 class="talk-title">Securing the Cloud: Zero Trust with Google Cloud Security</h3>
                     <p class="talk-desc">BeyondCorp Enterprise, Security Command Center, and Cloud Armor for comprehensive threat protection.</p>
+                    
+                    <div class="talk-actions">
+                        <a href="#" class="action-btn gcal-btn" target="_blank">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                            <span data-i18n="addToCal">Add to Calendar</span>
+                        </a>
+                        <button class="action-btn more-info-btn">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            <span data-i18n="moreInfo">More Info</span>
+                        </button>
+                    </div>
+                    <div class="more-info-content">
+                        <p style="margin-bottom:8px"><strong>Location:</strong> Stage Alpha</p>
+                        <p>Detailed insights into the technical implementations, architecture decisions, and best practices directly from Google Cloud experts.</p>
+                    </div>
                     <div class="talk-speakers">
-                        <a href="https://linkedin.com/in/rebeccangyuen" target="_blank" class="speaker-chip"><div class="speaker-avatar">RN</div><div><div class="speaker-name">Rebecca Nguyen</div><div class="speaker-link-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> in</div></div></a>
+                        <a href="https://linkedin.com/in/salvadorvazquez" target="_blank" class="speaker-chip"><div class="speaker-avatar">SV</div><div><div class="speaker-name">Salvador Vázquez</div><div class="speaker-link-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> in</div></div></a>
                     </div>
                 </div>
             </div>
@@ -502,22 +715,22 @@
     <!-- SPEAKERS -->
     <section class="speakers" id="speakers">
         <div class="section-header reveal">
-            <h2 class="section-title">Speakers</h2>
+            <h2 class="section-title" data-i18n="speakersTitle">Speakers</h2>
             <span class="section-count">// 12 experts</span>
         </div>
         <div class="speakers-grid">
-            <a href="https://linkedin.com/in/mariachen" target="_blank" class="speaker-card"><div class="speaker-card-avatar">MC</div><h4 class="speaker-card-name">Maria Chen</h4><span class="speaker-card-link">LinkedIn →</span></a>
-            <a href="https://linkedin.com/in/jamesrodriguez" target="_blank" class="speaker-card"><div class="speaker-card-avatar">JR</div><h4 class="speaker-card-name">James Rodriguez</h4><span class="speaker-card-link">LinkedIn →</span></a>
-            <a href="https://linkedin.com/in/aishapatel" target="_blank" class="speaker-card"><div class="speaker-card-avatar">AP</div><h4 class="speaker-card-name">Aisha Patel</h4><span class="speaker-card-link">LinkedIn →</span></a>
-            <a href="https://linkedin.com/in/davidkim" target="_blank" class="speaker-card"><div class="speaker-card-avatar">DK</div><h4 class="speaker-card-name">David Kim</h4><span class="speaker-card-link">LinkedIn →</span></a>
-            <a href="https://linkedin.com/in/sophiemuller" target="_blank" class="speaker-card"><div class="speaker-card-avatar">SM</div><h4 class="speaker-card-name">Sophie Müller</h4><span class="speaker-card-link">LinkedIn →</span></a>
-            <a href="https://linkedin.com/in/carlosoliveira" target="_blank" class="speaker-card"><div class="speaker-card-avatar">CO</div><h4 class="speaker-card-name">Carlos Oliveira</h4><span class="speaker-card-link">LinkedIn →</span></a>
-            <a href="https://linkedin.com/in/priyasharma" target="_blank" class="speaker-card"><div class="speaker-card-avatar">PS</div><h4 class="speaker-card-name">Priya Sharma</h4><span class="speaker-card-link">LinkedIn →</span></a>
-            <a href="https://linkedin.com/in/liamobrien" target="_blank" class="speaker-card"><div class="speaker-card-avatar">LO</div><h4 class="speaker-card-name">Liam O'Brien</h4><span class="speaker-card-link">LinkedIn →</span></a>
-            <a href="https://linkedin.com/in/yukitanaka" target="_blank" class="speaker-card"><div class="speaker-card-avatar">YT</div><h4 class="speaker-card-name">Yuki Tanaka</h4><span class="speaker-card-link">LinkedIn →</span></a>
-            <a href="https://linkedin.com/in/elenavasquez" target="_blank" class="speaker-card"><div class="speaker-card-avatar">EV</div><h4 class="speaker-card-name">Elena Vasquez</h4><span class="speaker-card-link">LinkedIn →</span></a>
-            <a href="https://linkedin.com/in/omarhassan" target="_blank" class="speaker-card"><div class="speaker-card-avatar">OH</div><h4 class="speaker-card-name">Omar Hassan</h4><span class="speaker-card-link">LinkedIn →</span></a>
-            <a href="https://linkedin.com/in/rebeccangyuen" target="_blank" class="speaker-card"><div class="speaker-card-avatar">RN</div><h4 class="speaker-card-name">Rebecca Nguyen</h4><span class="speaker-card-link">LinkedIn →</span></a>
+            <a href="https://linkedin.com/in/juliovelazquez" target="_blank" class="speaker-card"><div class="speaker-card-avatar">JV</div><h4 class="speaker-card-name">Julio Velázquez</h4><span class="speaker-card-link">LinkedIn →</span></a>
+            <a href="https://linkedin.com/in/debicabrera" target="_blank" class="speaker-card"><div class="speaker-card-avatar">DC</div><h4 class="speaker-card-name">Debi Cabrera</h4><span class="speaker-card-link">LinkedIn →</span></a>
+            <a href="https://linkedin.com/in/luciasubatin" target="_blank" class="speaker-card"><div class="speaker-card-avatar">LS</div><h4 class="speaker-card-name">Lucia Subatin</h4><span class="speaker-card-link">LinkedIn →</span></a>
+            <a href="https://linkedin.com/in/marianocolin" target="_blank" class="speaker-card"><div class="speaker-card-avatar">MC</div><h4 class="speaker-card-name">Mariano Colin</h4><span class="speaker-card-link">LinkedIn →</span></a>
+            <a href="https://linkedin.com/in/victorgude" target="_blank" class="speaker-card"><div class="speaker-card-avatar">VG</div><h4 class="speaker-card-name">Victor Gude</h4><span class="speaker-card-link">LinkedIn →</span></a>
+            <a href="https://linkedin.com/in/miguelreyes" target="_blank" class="speaker-card"><div class="speaker-card-avatar">MR</div><h4 class="speaker-card-name">Miguel Reyes</h4><span class="speaker-card-link">LinkedIn →</span></a>
+            <a href="https://linkedin.com/in/siaharaalvarez" target="_blank" class="speaker-card"><div class="speaker-card-avatar">SA</div><h4 class="speaker-card-name">Siahara Alvarez</h4><span class="speaker-card-link">LinkedIn →</span></a>
+            <a href="https://linkedin.com/in/melinalopez" target="_blank" class="speaker-card"><div class="speaker-card-avatar">ML</div><h4 class="speaker-card-name">Melina López</h4><span class="speaker-card-link">LinkedIn →</span></a>
+            <a href="https://linkedin.com/in/federosenhain" target="_blank" class="speaker-card"><div class="speaker-card-avatar">FR</div><h4 class="speaker-card-name">Fede Rosenhain</h4><span class="speaker-card-link">LinkedIn →</span></a>
+            <a href="https://linkedin.com/in/pabloperezvillanueva" target="_blank" class="speaker-card"><div class="speaker-card-avatar">PV</div><h4 class="speaker-card-name">Pablo Pérez Villanueva</h4><span class="speaker-card-link">LinkedIn →</span></a>
+            <a href="https://linkedin.com/in/armandoestrada" target="_blank" class="speaker-card"><div class="speaker-card-avatar">AE</div><h4 class="speaker-card-name">Armando Estrada</h4><span class="speaker-card-link">LinkedIn →</span></a>
+            <a href="https://linkedin.com/in/salvadorvazquez" target="_blank" class="speaker-card"><div class="speaker-card-avatar">SV</div><h4 class="speaker-card-name">Salvador Vázquez</h4><span class="speaker-card-link">LinkedIn →</span></a>
         </div>
     </section>
 
@@ -525,16 +738,138 @@
     <footer class="footer">
         <div class="footer-left">
             <div class="footer-logo">Google Cloud Summit</div>
-            <p class="footer-text">© 2026 · GDG Codelab · Exercise 02</p>
+            <p class="footer-text" data-i18n="footerText">© 2026 · GDG Codelab · Exercise 02</p>
         </div>
         <div class="footer-right">
-            <a href="../" class="footer-back">← Back to exercises</a>
+            <a href="../" class="footer-back" data-i18n="backToExercises">← Back to exercises</a>
         </div>
     </footer>
+
+
+    <!-- SETTINGS FAB -->
+    <div class="settings-fab" id="settings-fab">
+        <div class="settings-header" id="settings-toggle">
+            <svg class="settings-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        </div>
+        <div class="settings-content">
+            <div class="settings-row">
+                <span class="settings-label" data-i18n="themeColor">Theme Color</span>
+                <div class="color-picker">
+                    <button class="color-btn active" style="background:#9B6DFF" data-color="#9B6DFF"></button>
+                    <button class="color-btn" style="background:#4285F4" data-color="#4285F4"></button>
+                    <button class="color-btn" style="background:#34A853" data-color="#34A853"></button>
+                    <button class="color-btn" style="background:#EA4335" data-color="#EA4335"></button>
+                </div>
+            </div>
+            <div class="settings-row">
+                <span class="settings-label" data-i18n="language">Language</span>
+                <div class="lang-picker">
+                    <button class="lang-btn active" data-lang="en">EN</button>
+                    <button class="lang-btn" data-lang="es">ES</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
     (function() {
         'use strict';
+
+        // Settings FAB logic
+        const fab = document.getElementById('settings-fab');
+        const toggle = document.getElementById('settings-toggle');
+        
+        toggle.addEventListener('click', () => {
+            fab.classList.toggle('open');
+        });
+        
+        // click outside to close
+        document.addEventListener('click', (e) => {
+            if(!fab.contains(e.target)) fab.classList.remove('open');
+        });
+
+        // Color Picker Logic
+        const colorBtns = document.querySelectorAll('.color-btn');
+        colorBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                colorBtns.forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                document.documentElement.style.setProperty('--accent', e.target.dataset.color);
+            });
+        });
+
+        // i18n Logic
+        const translations = {
+            en: {
+                schedule: "Schedule",
+                speakersTitle: "Speakers",
+                backBtn: "← Back",
+                heroBadge: "Google Cloud Technologies",
+                heroTagline: "A full day of cutting-edge talks on AI, cloud infrastructure, and next-generation developer tools from industry-leading experts.",
+                viewSchedule: "<span data-i18n="viewSchedule">View Schedule</span>",
+                speakersBtn: "Speakers",
+                searchPlaceholder: "Search talks, speakers...",
+                all: "All",
+                ai: "AI & ML",
+                infra: "Infrastructure",
+                
+                viewCards: "Card View",
+                viewCalendar: "Calendar View",
+                addToCal: "Add to Calendar",
+                moreInfo: "More Info",
+                footerText: "© 2026 · GDG Codelab · Exercise 02",
+                backToExercises: "← Back to exercises",
+                themeColor: "Theme Color",
+                language: "Language"
+            },
+            es: {
+                schedule: "Agenda",
+                speakersTitle: "Ponentes",
+                backBtn: "← Volver",
+                heroBadge: "Tecnologías Google Cloud",
+                heroTagline: "Un día completo de charlas vanguardistas sobre IA, infraestructura en la nube y herramientas de desarrollo por expertos de la industria.",
+                viewSchedule: "Ver Agenda",
+                speakersBtn: "Ponentes",
+                searchPlaceholder: "Buscar charlas, ponentes...",
+                all: "Todos",
+                ai: "IA y ML",
+                infra: "Infraestructura",
+                
+                viewCards: "Vista Lista",
+                viewCalendar: "Vista Calendario",
+                addToCal: "Añadir a Calendario",
+                moreInfo: "Más Info",
+                footerText: "© 2026 · GDG Codelab · Ejercicio 02",
+                backToExercises: "← Volver a ejercicios",
+                themeColor: "Color Tema",
+                language: "Idioma"
+            }
+        };
+
+        const langBtns = document.querySelectorAll('.lang-btn');
+        langBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                langBtns.forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                const lang = e.target.dataset.lang;
+                
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if(translations[lang][key]) {
+                        if(el.tagName === 'INPUT') el.placeholder = translations[lang][key];
+                        else el.innerHTML = translations[lang][key];
+                    }
+                });
+                
+                // Keep inner SVG or extra nodes safe for Hero buttons
+                // For "<span data-i18n="viewSchedule">View Schedule</span>" and "Speakers" hero cta, we need to carefully replace text node
+                document.querySelectorAll('.hero-cta span[data-i18n]').forEach(el => {
+                     const key = el.getAttribute('data-i18n');
+                     if(translations[lang][key]) el.textContent = translations[lang][key];
+                });
+            });
+        });
+
         // Scroll reveal
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((e,i) => {
@@ -545,6 +880,64 @@
             });
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal, .reveal-left').forEach(el => observer.observe(el));
+
+        
+        // Setup View Toggles
+        const btnCards = document.getElementById('btn-view-cards');
+        const btnCal = document.getElementById('btn-view-calendar');
+        const timeline = document.getElementById('timeline');
+        
+        if (btnCards && btnCal) {
+            btnCards.addEventListener('click', () => {
+                btnCards.classList.add('active');
+                btnCal.classList.remove('active');
+                timeline.classList.remove('calendar-mode');
+            });
+            btnCal.addEventListener('click', () => {
+                btnCal.classList.add('active');
+                btnCards.classList.remove('active');
+                timeline.classList.add('calendar-mode');
+            });
+        }
+
+        // Setup More Info Toggles
+        document.querySelectorAll('.more-info-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const target = e.currentTarget;
+                const content = target.closest('.talk-content').querySelector('.more-info-content');
+                if(!content) return;
+                const isExpanded = content.classList.contains('expanded');
+                
+                content.classList.toggle('expanded');
+                const span = target.querySelector('span');
+                const activeLangBtn = document.querySelector('.lang-btn.active');
+                const lang = activeLangBtn ? activeLangBtn.dataset.lang : 'en';
+                
+                if (!isExpanded) {
+                    span.innerHTML = lang === 'es' ? 'Menos Info' : 'Less Info';
+                    target.querySelector('svg').innerHTML = '<line x1="5" y1="12" x2="19" y2="12"></line>';
+                } else {
+                    span.innerHTML = lang === 'es' ? 'Más Info' : 'More Info';
+                    target.querySelector('svg').innerHTML = '<line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line>';
+                }
+            });
+        });
+
+        // Update GCAL Links
+        document.querySelectorAll('.talk-card').forEach(card => {
+            if(card.id === 'talk-LUNCH') return;
+            const titleEl = card.querySelector('.talk-title');
+            if(!titleEl) return;
+            const title = encodeURIComponent(titleEl.innerText);
+            const timeStr = card.querySelector('.talk-time').innerText; 
+            const [h, m] = timeStr.split(':');
+            const dateStr = '20260415T' + h + m + '00Z';
+            const dateStrEnd = '20260415T' + (parseInt(h)+1).toString().padStart(2,'0') + m + '00Z';
+            const btn = card.querySelector('.gcal-btn');
+            if(btn) {
+                btn.href = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dateStr}/${dateStrEnd}&location=Googleplex,+Mountain+View`;
+            }
+        });
 
         // Search & Filter
         const input = document.getElementById('search-input');

@@ -7,7 +7,7 @@
     <title>ProyectoGDG — Building with Google Antigravity</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="particles.css">
     <style>
         /* ═══════════════════════════════════════════════
@@ -890,6 +890,25 @@
     </footer>
 
     <script>
+        // ─── RANDOMIZED BRUTALIST LAYOUT SHIFTS ───
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.exercise-card').forEach(card => {
+                // Random offset between -2px and 2px
+                const xOffset = (Math.random() * 4 - 2).toFixed(1);
+                const yOffset = (Math.random() * 4 - 2).toFixed(1);
+                // In brutalism, slight misalignments look intentional
+                card.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+                
+                // On hover reset the transform
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = `translate(0px, 0px)`;
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+                });
+            });
+        });
+
         // Smooth scroll for nav links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
