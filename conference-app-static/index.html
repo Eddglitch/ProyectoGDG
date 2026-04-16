@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -806,7 +806,7 @@
                 backBtn: "← Back",
                 heroBadge: "Google Cloud Technologies",
                 heroTagline: "A full day of cutting-edge talks on AI, cloud infrastructure, and next-generation developer tools from industry-leading experts.",
-                viewSchedule: "<span data-i18n="viewSchedule">View Schedule</span>",
+                viewSchedule: "View Schedule",
                 speakersBtn: "Speakers",
                 searchPlaceholder: "Search talks, speakers...",
                 all: "All",
@@ -853,19 +853,29 @@
                 e.target.classList.add('active');
                 const lang = e.target.dataset.lang;
                 
+                // Apply translations — guard SVG-containing icon buttons
                 document.querySelectorAll('[data-i18n]').forEach(el => {
                     const key = el.getAttribute('data-i18n');
-                    if(translations[lang][key]) {
-                        if(el.tagName === 'INPUT') el.placeholder = translations[lang][key];
-                        else el.innerHTML = translations[lang][key];
+                    const val = translations[lang][key];
+                    if (!val) return;
+                    if (el.tagName === 'INPUT') {
+                        el.placeholder = val;
+                    } else if (el.tagName === 'BUTTON' && el.querySelector('svg') && !el.querySelector('span')) {
+                        // Icon-only button: update label attrs, don't touch innerHTML
+                        el.title = val;
+                        el.setAttribute('aria-label', val);
+                    } else if (el.tagName === 'SPAN' || el.tagName === 'A' || el.tagName === 'P' || el.tagName === 'DIV') {
+                        el.textContent = val;
+                    } else {
+                        el.innerHTML = val;
                     }
                 });
                 
-                // Keep inner SVG or extra nodes safe for Hero buttons
-                // For "<span data-i18n="viewSchedule">View Schedule</span>" and "Speakers" hero cta, we need to carefully replace text node
+                // Hero CTA spans (already handled above via SPAN case)
+                // But we double-check so inner SVGs in .hero-cta anchors are preserved
                 document.querySelectorAll('.hero-cta span[data-i18n]').forEach(el => {
-                     const key = el.getAttribute('data-i18n');
-                     if(translations[lang][key]) el.textContent = translations[lang][key];
+                    const key = el.getAttribute('data-i18n');
+                    if (translations[lang][key]) el.textContent = translations[lang][key];
                 });
             });
         });
@@ -878,8 +888,8 @@
                     observer.unobserve(e.target);
                 }
             });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.reveal, .reveal-left').forEach(el => observer.observe(el));
+        }, { threshold: 0.05, rootMargin: '0px 0px -80px 0px' });
+        document.querySelectorAll('.reveal, .reveal-left, .talk-card').forEach(el => observer.observe(el));
 
         
         // Setup View Toggles

@@ -124,12 +124,23 @@
     }
 
     function onTimerComplete() {
+        // Glitch flash effect
+        document.body.classList.add('session-complete');
+        setTimeout(() => document.body.classList.remove('session-complete'), 700);
+
         if (currentMode === 'focus') {
             sessionsCompleted++;
             sessionCount.textContent = sessionsCompleted;
             if (sessionsCompleted <= 8) {
                 progressDots[sessionsCompleted - 1].classList.add('filled');
             }
+            // Blink title notification
+            let blinks = 0;
+            const origTitle = document.title;
+            const blinkInterval = setInterval(() => {
+                document.title = blinks % 2 === 0 ? '✓ SESSION DONE — Pomodoro Flow' : origTitle;
+                if (++blinks > 5) { clearInterval(blinkInterval); document.title = origTitle; }
+            }, 500);
             // Long break every 4
             const nextMode = sessionsCompleted % 4 === 0 ? 'long-break' : 'short-break';
             statusDisplay.textContent = 'Session complete!';
